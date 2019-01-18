@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">GestorDeEjercicio</string>
+    <string name="lunes">Lunes:</string>
+    <string name="correo_electronico">Correo Electronico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="iniciar_sesion">Iniciar Sesíon</string>
+    <string name="contrasena_olvidada">¿Olvidaste tu contraseña?</string>
+    <string name="inicio_facebook">Iniciar con Facebook</string>
+    <string name="registrarse">Registrarse</string>
 </resources>
