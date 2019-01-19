@@ -7,4 +7,6 @@
     <string name="contrasena_olvidada">¿Olvidaste tu contraseña?</string>
     <string name="inicio_facebook">Iniciar con Facebook</string>
     <string name="registrarse">Registrarse</string>
+    <string name="tiempo">Tiempo:</string>
+    <string name="distancia">Distancia:</string>
 </resources>
