@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".InicioSesion" />
         <activity android:name=".Registro" />
-        <activity android:name=".Cronometro"></activity>
+        <activity android:name=".Cronometro" />
+        <activity android:name=".Configuracion" />
     </application>
 
 </manifest>
