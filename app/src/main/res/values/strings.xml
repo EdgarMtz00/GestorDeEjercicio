@@ -9,4 +9,6 @@
     <string name="registrarse">Registrarse</string>
     <string name="tiempo">Tiempo:</string>
     <string name="distancia">Distancia:</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="configurar_informaci_n_personal">Configurar información personal</string>
 </resources>

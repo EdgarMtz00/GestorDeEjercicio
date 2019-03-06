@@ -7,7 +7,7 @@
     tools:context=".Registro">
 
     <EditText
-        android:id="@+id/edad"
+        android:id="@+id/etEdad"
         android:layout_width="81dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -16,10 +16,10 @@
         android:hint="Edad"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/etPwd" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/etContrasena"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -30,10 +30,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/correo" />
+        app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/etPwd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -44,10 +44,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/etContrasena" />
 
     <EditText
-        android:id="@+id/correo"
+        android:id="@+id/etCorreo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/etButton"
         android:onClick="terminos"
         android:layout_width="213dp"
         android:layout_height="37dp"
@@ -69,7 +69,7 @@
         android:layout_marginTop="8dp"
         android:text="Términos y Condiciones"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/estatura" />
+        app:layout_constraintTop_toBottomOf="@+id/etEstatura" />
 
     <ImageButton
         android:id="@+id/info"
@@ -83,7 +83,7 @@
         app:srcCompat="@android:drawable/ic_menu_help" />
 
     <Button
-        android:id="@+id/registrarse"
+        android:id="@+id/btnReg"
         android:onClick="onClickRegistro"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
@@ -93,10 +93,10 @@
         android:text="Registrarse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/etButton" />
 
     <Button
-        android:id="@+id/facebook"
+        android:id="@+id/btnFacebook"
         android:onClick="onClickFacebook"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
@@ -106,7 +106,7 @@
         android:text="Registrarse con Facebook"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registrarse" />
+        app:layout_constraintTop_toBottomOf="@+id/btnReg" />
 
     <ImageView
         android:id="@+id/logo"
@@ -121,7 +121,7 @@
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <EditText
-        android:id="@+id/peso"
+        android:id="@+id/etPeso"
         android:layout_width="81dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -130,10 +130,10 @@
         android:hint="Peso"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/etPwd" />
 
     <EditText
-        android:id="@+id/estatura"
+        android:id="@+id/etEstatura"
         android:layout_width="81dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -143,7 +143,7 @@
         android:hint="Estatura"
         android:inputType="number"
         app:layout_constraintEnd_toStartOf="@+id/edad"
-        app:layout_constraintStart_toEndOf="@+id/peso"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintStart_toEndOf="@+id/etPeso"
+        app:layout_constraintTop_toBottomOf="@+id/etPwd" />
 
 </android.support.constraint.ConstraintLayout>
