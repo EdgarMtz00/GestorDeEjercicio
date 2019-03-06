@@ -12,7 +12,7 @@ public class Registro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
         etContrasena = findViewById(R.id.etContrasena);
-        etCorreo = findViewById(R.idetCorreo);
+        etCorreo = findViewById(R.id.etCorreo);
         etPwd = findViewById(R.id.etPwd);
         etEstatura = findViewById(R.id.etEstatura);
         etPeso = findViewById(R.id.etPeso);

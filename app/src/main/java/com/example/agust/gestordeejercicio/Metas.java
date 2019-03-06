@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Cronometro.OnFragmentInteractionListener} interface
+ * {@link Metas.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Cronometro#newInstance} factory method to
+ * Use the {@link Metas#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Cronometro extends Fragment {
+public class Metas extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +29,7 @@ public class Cronometro extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public Cronometro() {
+    public Metas() {
         // Required empty public constructor
     }
 
@@ -39,11 +39,11 @@ public class Cronometro extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Cronometro.
+     * @return A new instance of fragment Metas.
      */
     // TODO: Rename and change types and number of parameters
-    public static Cronometro newInstance(String param1, String param2) {
-        Cronometro fragment = new Cronometro();
+    public static Metas newInstance(String param1, String param2) {
+        Metas fragment = new Metas();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,7 +64,7 @@ public class Cronometro extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cronometro, container, false);
+        return inflater.inflate(R.layout.fragment_metas, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
