@@ -11,11 +11,16 @@ public class PageAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return null;
+        switch (position){
+            case 0: return new Rutinas();
+            case 1: return new Cronometro();
+            case 2: return new Metas();
+            default: return new Rutinas();
+        }
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return 3;
     }
 }
