@@ -1,5 +1,6 @@
 package com.example.agust.gestordeejercicio;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -9,6 +10,12 @@ public class PageAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
+    /**
+     * @param position:
+     * Numero del item a regresar
+     * @return:
+     * Fragment
+     */
     @Override
     public Fragment getItem(int position) {
         switch (position){
@@ -19,8 +26,17 @@ public class PageAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    @Nullable
     @Override
-    public int getCount() {
-        return 3;
+    public CharSequence getPageTitle(int position) {
+        switch (position){
+            case 0: return "Rutinas";
+            case 1: return "Cronometro";
+            case 2: return "Metas";
+            default: return  "tienes un error en el pager";
+        }
     }
+
+    @Override
+    public int getCount() {return 3;}
 }
