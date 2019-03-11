@@ -31,6 +31,14 @@
             app:layout_constraintBottom_toTopOf="@+id/txtDistancia"
             app:layout_constraintRight_toRightOf="parent"
             android:text="@string/tiempo"/>
+        <Chronometer
+            android:id="@+id/crono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="@+id/prgReloj"
+            app:layout_constraintLeft_toLeftOf="@id/prgReloj"
+            app:layout_constraintBottom_toBottomOf="@id/prgReloj"
+            app:layout_constraintTop_toTopOf="@+id/prgReloj"/>
         <TextView
             android:id="@+id/txtDistancia"
             android:layout_width="wrap_content"
