@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class InicioSesion extends AppCompatActivity {
 
@@ -21,6 +22,9 @@ public class InicioSesion extends AppCompatActivity {
         String correo, contrasena;
         correo = etCorreo.getText().toString();
         contrasena = etContrasena.getText().toString();
+        if (!correo.equals("") && !contrasena.equals("")){
+            Toast.makeText(this, "hola", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

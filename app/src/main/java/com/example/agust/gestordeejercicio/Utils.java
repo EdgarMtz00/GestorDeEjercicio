@@ -2,6 +2,7 @@ package com.example.agust.gestordeejercicio;
 
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,16 +24,27 @@ public class Utils {
     private JSONObject jsonObject;
     private JSONArray jsonArray;
     private RequestQueue rQueue;
+    private Context context;
+
+    public JSONObject getJsonObject() {
+        rQueue.start();
+        return jsonObject;
+    }
+
+    public JSONArray getJsonArray() {
+        return jsonArray;
+    }
 
     Utils(Context context){
         rQueue = Volley.newRequestQueue(context);
+        this.context = context;
     }
 
-    JSONObject getJson(String url){
-        jsonObejctRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+    void requestJson(String url, JSONObject params){
+        jsonObejctRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                jsonObject = response;
+                processResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -46,12 +58,14 @@ public class Utils {
             }
         });
         rQueue.add(jsonObejctRequest);
-        rQueue.start();
-        return jsonObject;
     }
 
-    JSONArray getJsonArray(String url){
-        jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+    private void processResponse(JSONObject response){
+        jsonObject = response;
+    }
+
+    JSONArray getJsonArray(String url, JSONArray params){
+        jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, params, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 jsonArray = response;
@@ -66,5 +80,14 @@ public class Utils {
         rQueue.add(jsonArrayRequest);
         rQueue.start();
         return jsonArray;
+    }
+
+    boolean validateText(String[] input){
+        for (String value : input){
+            if(value.equals("")){
+                return false;
+            }
+        }
+        return true;
     }
 }
