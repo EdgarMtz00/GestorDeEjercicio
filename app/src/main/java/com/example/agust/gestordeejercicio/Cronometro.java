@@ -14,33 +14,35 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ProgressBar;
 
-public class Cronometro extends Fragment {
+import java.sql.Time;
 
+public class Cronometro extends Fragment {
     boolean click;
     ProgressBar prgReloj;
-    int progreso;
-    Handler mHandler = new Handler();
+    int progreso = 0;
 
-    final Thread prgThread = new Thread(new Runnable() {
+    CountDownTimer timerProgress = new CountDownTimer(60000, 1000) {
         @Override
-        public void run() {
-            while(progreso <= 60){
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgReloj.setProgress(progreso);
-                    }
-                });
-                progreso++;
-                SystemClock.sleep(1000);
-            }
+        public void onTick(long millisUntilFinished) {
+            progreso++;
+            prgReloj.setProgress(progreso);
         }
-    });
+
+
+
+        @Override
+        public void onFinish() {
+            progreso = 0;
+            prgReloj.setProgress(progreso);
+            timerProgress.start();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_cronometro, container, false);
+
         Button btnPausa = v.findViewById(R.id.btnPausa);
         final Chronometer crono = v.findViewById(R.id.crono);
         prgReloj = v.findViewById(R.id.prgReloj);
@@ -52,23 +54,12 @@ public class Cronometro extends Fragment {
             @Override
             public void onClick(View v) {
                 if(click){
+                    crono.setBase(SystemClock.elapsedRealtime());
                     crono.start();
-                    if(Thread.interrupted()){
-                        synchronized (prgThread) {
-                            prgThread.notify();
-                        }
-                    }else {
-                        prgThread.start();
-                    }
+                    timerProgress.start();
                 }else{
                     crono.stop();
-                    synchronized (prgThread){
-                        try {
-                            prgThread.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    timerProgress.cancel();
                 }
                 click = !click;
             }

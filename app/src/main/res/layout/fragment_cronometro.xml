@@ -22,15 +22,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btnPausa"
             app:layout_constraintBottom_toTopOf="parent"/>
-        <TextView
-            android:id="@+id/txtTiempo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/prgReloj"
-            app:layout_constraintBottom_toTopOf="@+id/txtDistancia"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="@string/tiempo"/>
         <Chronometer
             android:id="@+id/crono"
             android:layout_width="wrap_content"
@@ -43,7 +34,7 @@
             android:id="@+id/txtDistancia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/txtTiempo"
+            app:layout_constraintTop_toBottomOf="@+id/prgReloj"
             app:layout_constraintBottom_toTopOf="@+id/btnPausa"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
