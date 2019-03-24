@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if (preferences.getBoolean("isLogged", false)){
+        //if (preferences.getBoolean("isLogged", false)){
+        if(true){
             //conectar usuario
         }else{
             Intent Sesion = new Intent(this, InicioSesion.class);

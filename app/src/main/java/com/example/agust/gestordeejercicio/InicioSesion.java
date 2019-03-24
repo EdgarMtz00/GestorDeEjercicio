@@ -24,6 +24,7 @@ public class InicioSesion extends AppCompatActivity {
         contrasena = etContrasena.getText().toString();
         if (!correo.equals("") && !contrasena.equals("")){
             Toast.makeText(this, "hola", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainActivity.class));
         }
 
     }

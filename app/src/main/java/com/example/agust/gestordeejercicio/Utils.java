@@ -2,6 +2,7 @@ package com.example.agust.gestordeejercicio;
 
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -89,5 +90,9 @@ public class Utils {
             }
         }
         return true;
+    }
+
+    boolean validateEmail(String email){
+        return !email.equals("") && email.contains("@");
     }
 }
