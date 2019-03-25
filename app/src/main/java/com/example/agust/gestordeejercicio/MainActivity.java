@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         //if (preferences.getBoolean("isLogged", false)){
-        if(preferences.getBoolean("isLogged", false)){
+        if(!preferences.getBoolean("isLogged", false)){
             //conectar usuario
         }else{
             Intent Sesion = new Intent(this, InicioSesion.class);

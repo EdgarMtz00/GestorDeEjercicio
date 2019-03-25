@@ -1,17 +1,31 @@
 package com.example.agust.gestordeejercicio;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Set;
 
 public class Registro extends AppCompatActivity {
     EditText etContrasena, etCorreo, etPwd, etEstatura, etPeso, etEdad;
     Utils utils;
+    SharedPreferences preferences;
     String url = "http://192.168.1.79/ServerEjercicio/Registrar.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +38,7 @@ public class Registro extends AppCompatActivity {
         etPeso = findViewById(R.id.etPeso);
         etEdad = findViewById(R.id.etEdad);
         utils = new Utils(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     public void onClickRegistro(View v){
@@ -41,29 +56,32 @@ public class Registro extends AppCompatActivity {
                 try {
                     data.put("correo", correo);
                     data.put("pwd", pwd);
-                    data.put("edad", edad);
-                    data.put("peso", peso);
-                    data.put("estatura", estatura);
-                    new ConexionAsync(url, data, this){
-                        public void onPostExecute(JSONObject response){
-                            Toast.makeText(ctx, "Registrado", Toast.LENGTH_LONG).show();
-                        }
-                    }.execute();
+                    data.put("edad", Integer.parseInt(edad));
+                    data.put("peso", Integer.parseInt(peso));
+                    data.put("estatura", Integer.parseInt(estatura));
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                utils.requestJson(url, data);
-                JSONObject res = utils.getJsonObject();
-                try {
-                    String s = res.getString("Error");
-                    Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "hola", Toast.LENGTH_SHORT).show();
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    logIn(response);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                    RequestQueue rQueue = Volley.newRequestQueue(this);
+                    rQueue.add(jsonRequest);
+                    rQueue.start();
+                    Toast.makeText(this, "adios", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-
         }else{
             Toast.makeText(this, "Las contraseñas deben ser iguales", Toast.LENGTH_SHORT).show();
         }
@@ -79,5 +97,17 @@ public class Registro extends AppCompatActivity {
 
     public void terminos(View v){
 
+    }
+
+    public void logIn(JSONObject data){
+        try {
+            Toast.makeText(this, "Registrado" + data.getString("msg"), Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isLogged", true);
+        editor.apply();
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

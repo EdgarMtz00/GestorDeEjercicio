@@ -21,38 +21,47 @@ public class ConexionAsync extends AsyncTask<Void, Integer, JSONObject> {
     JSONObject params, jsonResponse;
     String url;
     Context ctx;
-    RequestQueue rQueue = Volley.newRequestQueue(ctx);
+    RequestQueue rQueue;
+    JsonObjectRequest jsonRequest;
+    boolean ready = false;
 
-    public ConexionAsync(String url, JSONObject params, Context  ctx){
+    public ConexionAsync(String url, JSONObject params, Context  ctx) {
         this.url = url;
         this.params = params;
         this.ctx = ctx;
-    }
+        rQueue = Volley.newRequestQueue(ctx);
 
-    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, params,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    jsonResponse = response;
-                }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    jsonResponse = new JSONObject();
-                    try {
-                        jsonResponse.put("Error", "Error");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        jsonRequest = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        jsonResponse = response;
+                        ready = true;
                     }
-                }
-            });
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        jsonResponse = new JSONObject();
+                        try {
+                            jsonResponse.put("Error", "Error");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
 
     @Override
     protected JSONObject doInBackground(Void... voids) {
-        rQueue.add(jsonRequest);
-        rQueue.start();
-        return jsonResponse;
+        if(ready) {
+            rQueue.add(jsonRequest);
+            rQueue.start();
+            return jsonResponse;
+        }else{
+            //Toast.makeText(ctx, "Puta madre", Toast.LENGTH_SHORT).show();
+            return null;
+        }
     }
 
     @Override

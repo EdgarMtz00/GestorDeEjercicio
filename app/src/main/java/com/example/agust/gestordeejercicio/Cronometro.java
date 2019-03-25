@@ -60,6 +60,9 @@ public class Cronometro extends Fragment {
                 }else{
                     crono.stop();
                     timerProgress.cancel();
+                    progreso = 0;
+                    prgReloj.setProgress(progreso);
+                    crono.setBase(SystemClock.elapsedRealtime());
                 }
                 click = !click;
             }
