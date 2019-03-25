@@ -35,6 +35,7 @@ public class Registro extends AppCompatActivity {
             estatura = etEstatura.getText().toString();
             peso = etPeso.getText().toString();
             String[] input ={correo, pwd, edad, estatura, peso};
+
             if(utils.validateText(input)) {
                 JSONObject data = new JSONObject();
                 try {
@@ -43,6 +44,12 @@ public class Registro extends AppCompatActivity {
                     data.put("edad", edad);
                     data.put("peso", peso);
                     data.put("estatura", estatura);
+                    new ConexionAsync(url, data, this){
+                        public void onPostExecute(JSONObject response){
+                            Toast.makeText(ctx, "Registrado", Toast.LENGTH_LONG).show();
+                        }
+                    }.execute();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
