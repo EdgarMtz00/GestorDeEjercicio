@@ -1,6 +1,8 @@
 package com.example.agust.gestordeejercicio;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class InicioSesion extends AppCompatActivity {
-
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+    SharedPreferences.Editor editor = preferences.edit();
     EditText etCorreo, etContrasena;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +25,10 @@ public class InicioSesion extends AppCompatActivity {
         String correo, contrasena;
         correo = etCorreo.getText().toString();
         contrasena = etContrasena.getText().toString();
-        if (!correo.equals("") && !contrasena.equals("")){
+        if (Utils.validateEmail(correo) && Utils.validateText(correo)){
             Toast.makeText(this, "hola", Toast.LENGTH_SHORT).show();
+            editor.putBoolean("isLogged", true);
+            editor.apply();
             startActivity(new Intent(this, MainActivity.class));
         }
 

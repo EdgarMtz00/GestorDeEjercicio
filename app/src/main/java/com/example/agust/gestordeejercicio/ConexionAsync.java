@@ -59,7 +59,7 @@ public class ConexionAsync extends AsyncTask<Void, Integer, JSONObject> {
             rQueue.start();
             return jsonResponse;
         }else{
-            //Toast.makeText(ctx, "Puta madre", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ctx, "fac", Toast.LENGTH_SHORT).show();
             return null;
         }
     }

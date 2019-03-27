@@ -83,7 +83,12 @@ public class Utils {
         return jsonArray;
     }
 
-    boolean validateText(String[] input){
+    /**
+     * validateText: comprueba que los strings de entrada no esten vacios
+     * input: Un string o array de strings que seran validados
+     * return: Verdadero si no hay strings vacios o falso en caso contrario
+     */
+    static boolean validateText(String[] input){
         for (String value : input){
             if(value.equals("")){
                 return false;
@@ -92,7 +97,16 @@ public class Utils {
         return true;
     }
 
-    boolean validateEmail(String email){
+    static boolean validateText(String input){
+        return !input.equals("");
+    }
+
+    /**
+     * validateEmail: Comprueba que un string tenga las caracteristicas de un email
+     * email: String a validar
+     * return: Verdadero si el string es un email o falso en el caso contrario
+     */
+    static boolean validateEmail(String email){
         return !email.equals("") && email.contains("@");
     }
 }
