@@ -1,52 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Cronometro">
 
-    <android.support.constraint.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Cronometro">
         <!--TODO girar progress bar para empezar desde arriba-->
         <ProgressBar
             android:id="@+id/prgReloj"
+            style="?android:progressBarStyleHorizontal"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:progress="10"
-            style="?android:progressBarStyleHorizontal"
             android:progressDrawable="@drawable/circulo"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btnPausa"
-            app:layout_constraintBottom_toTopOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnInicio" />
+
         <Chronometer
             android:id="@+id/crono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="@+id/prgReloj"
-            app:layout_constraintLeft_toLeftOf="@id/prgReloj"
             app:layout_constraintBottom_toBottomOf="@id/prgReloj"
-            app:layout_constraintTop_toTopOf="@+id/prgReloj"/>
+            app:layout_constraintLeft_toLeftOf="@id/prgReloj"
+            app:layout_constraintRight_toRightOf="@+id/prgReloj"
+            app:layout_constraintTop_toTopOf="@+id/prgReloj" />
+
         <TextView
             android:id="@+id/txtDistancia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/prgReloj"
-            app:layout_constraintBottom_toTopOf="@+id/btnPausa"
-            app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/distancia"
+            app:layout_constraintBottom_toTopOf="@+id/btnInicio"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="@string/distancia"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/prgReloj" />
+
+        <Button
+            android:id="@+id/btnInicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INICIAR"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/prgReloj" />
+
         <Button
             android:id="@+id/btnPausa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/prgReloj"
+            android:text="PAUSAR"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnInicio" />
 
     </android.support.constraint.ConstraintLayout>
 
