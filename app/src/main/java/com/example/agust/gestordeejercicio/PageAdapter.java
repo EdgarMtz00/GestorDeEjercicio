@@ -19,10 +19,10 @@ public class PageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0: return new Rutinas();
+            case 0: return new RutinasFragment();
             case 1: return new Cronometro();
             case 2: return new Metas();
-            default: return new Rutinas();
+            default: return new RutinasFragment();
         }
     }
 
