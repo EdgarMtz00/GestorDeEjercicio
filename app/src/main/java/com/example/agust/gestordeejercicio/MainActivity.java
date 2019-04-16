@@ -20,11 +20,12 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+        
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        //if (preferences.getBoolean("isLogged", false)){
-        if(!preferences.getBoolean("isLogged", false)){
+        if (preferences.getBoolean("isLogged", false)){
+        //if(!preferences.getBoolean("isLogged", false)){
             //conectar usuario
         }else{
             Intent Sesion = new Intent(this, InicioSesion.class);

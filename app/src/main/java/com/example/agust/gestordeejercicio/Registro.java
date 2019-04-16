@@ -24,9 +24,8 @@ import java.util.Set;
 
 public class Registro extends AppCompatActivity {
     EditText etContrasena, etCorreo, etPwd, etEstatura, etPeso, etEdad;
-    Utils utils;
     SharedPreferences preferences;
-    String url = "http://192.168.1.79/ServerEjercicio/Registrar.php";
+    String url = "http://192.168.1.69/ServerEjercicio/Registrar.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +36,6 @@ public class Registro extends AppCompatActivity {
         etEstatura = findViewById(R.id.etEstatura);
         etPeso = findViewById(R.id.etPeso);
         etEdad = findViewById(R.id.etEdad);
-        utils = new Utils(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
@@ -51,7 +49,7 @@ public class Registro extends AppCompatActivity {
             peso = etPeso.getText().toString();
             String[] input ={correo, pwd, edad, estatura, peso};
 
-            if(utils.validateText(input)) {
+            if(Utils.validateText(input)) {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("correo", correo);
@@ -77,7 +75,6 @@ public class Registro extends AppCompatActivity {
                     RequestQueue rQueue = Volley.newRequestQueue(this);
                     rQueue.add(jsonRequest);
                     rQueue.start();
-                    Toast.makeText(this, "adios", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -109,5 +106,6 @@ public class Registro extends AppCompatActivity {
         editor.putBoolean("isLogged", true);
         editor.apply();
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }
