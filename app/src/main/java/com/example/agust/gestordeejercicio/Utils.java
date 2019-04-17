@@ -27,62 +27,6 @@ public class Utils {
     private RequestQueue rQueue;
     private Context context;
 
-    public JSONObject getJsonObject() {
-        rQueue.start();
-        return jsonObject;
-    }
-
-    public JSONArray getJsonArray() {
-        return jsonArray;
-    }
-
-    Utils(Context context){
-        rQueue = Volley.newRequestQueue(context);
-        this.context = context;
-    }
-
-    void requestJson(String url, JSONObject params){
-        jsonObejctRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                processResponse(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("Error", "Error");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        rQueue.add(jsonObejctRequest);
-    }
-
-    private void processResponse(JSONObject response){
-        jsonObject = response;
-    }
-
-    JSONArray getJsonArray(String url, JSONArray params){
-        jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, params, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                jsonArray = response;
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                jsonArray = new JSONArray();
-                jsonArray.put("Error");
-            }
-        });
-        rQueue.add(jsonArrayRequest);
-        rQueue.start();
-        return jsonArray;
-    }
-
     /**
      * validateText: comprueba que los strings de entrada no esten vacios
      * input: Un string o array de strings que seran validados

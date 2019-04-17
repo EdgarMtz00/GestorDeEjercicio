@@ -1,12 +1,17 @@
 package com.example.agust.gestordeejercicio;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +72,27 @@ public class Cronometro extends Fragment {
         clickPausa = true;
         prgReloj.setMax(60); //Establece 60 como el valor maximo de prgReloj
 
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Asking user if explanation is needed
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+
+                //Prompt the user once explanation has been shown
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
+
         btnInicio.setOnClickListener(new View.OnClickListener() {
             /**
              * onClick: basado en el valor de click inicia o detiene el cronometro y el metodo timerProgress
@@ -115,4 +141,6 @@ public class Cronometro extends Fragment {
         });
         return v;
     }
+
+
 }

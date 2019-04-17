@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
-        
+
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Intent Sesion = new Intent(this, InicioSesion.class);
             startActivity(Sesion);
+            finish();
         }
     }
 }
