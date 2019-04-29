@@ -1,7 +1,9 @@
 package com.example.agust.gestordeejercicio;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.sql.Time;
 
@@ -34,6 +37,7 @@ import java.sql.Time;
 
 public class Cronometro extends Fragment {
     boolean clickInicio, clickPausa;
+    TextView txtDistancia;
     ProgressBar prgReloj;
     int progreso = 0;
     long progresoTemp=0;
@@ -64,6 +68,7 @@ public class Cronometro extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_cronometro, container, false);
+        txtDistancia = v.findViewById(R.id.txtDistancia);
         btnInicio = v.findViewById(R.id.btnInicio);
         btnPausa = v.findViewById(R.id.btnPausa);
         final Chronometer crono = v.findViewById(R.id.crono);
@@ -75,7 +80,7 @@ public class Cronometro extends Fragment {
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
+/*
             // Asking user if explanation is needed
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -91,7 +96,7 @@ public class Cronometro extends Fragment {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
-        }
+  */      }
 
         btnInicio.setOnClickListener(new View.OnClickListener() {
             /**
@@ -123,6 +128,8 @@ public class Cronometro extends Fragment {
             public void onClick(View v) {
                 if(!clickInicio)
                 {
+                    Intent intent = new Intent(getActivity(), GpsService.class);
+                    getActivity().startService(intent);
                     if(clickPausa){
                         progresoTemp = crono.getBase() - SystemClock.elapsedRealtime();
                         crono.stop();
@@ -142,5 +149,12 @@ public class Cronometro extends Fragment {
         return v;
     }
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String distance = intent.getStringExtra("distance");
+            txtDistancia.setText("Distance is " + distance+" M" );
+        }
+    };
 
 }

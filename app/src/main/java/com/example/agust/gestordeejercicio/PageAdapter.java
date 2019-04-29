@@ -22,6 +22,7 @@ public class PageAdapter extends FragmentStatePagerAdapter {
             case 0: return new RutinasFragment();
             case 1: return new Cronometro();
             case 2: return new Metas();
+            case 3: return new ConfiguracionFragment();
             default: return new RutinasFragment();
         }
     }
@@ -33,10 +34,11 @@ public class PageAdapter extends FragmentStatePagerAdapter {
             case 0: return "Rutinas";
             case 1: return "Cronometro";
             case 2: return "Metas";
+            case 3: return "configuracion";
             default: return  "tienes un error en el pager";
         }
     }
 
     @Override
-    public int getCount() {return 3;}
+    public int getCount() {return 4;}
 }

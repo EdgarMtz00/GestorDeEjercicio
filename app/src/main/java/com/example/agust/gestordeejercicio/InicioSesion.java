@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,22 +20,25 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class InicioSesion extends AppCompatActivity {
+public class InicioSesion extends AppCompatActivity implements View.OnClickListener {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     EditText etCorreo, etContrasena;
-    String url = "http://192.168.1.69/ServerEjercicio/IniciarSesion.php";
+    Button btnInicio;
+    String url = "http://192.168.1.86/ServerEjercicio/IniciarSesion.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
         etContrasena = findViewById(R.id.etContrasena);
         etCorreo = findViewById(R.id.etCorreo);
+        btnInicio = findViewById(R.id.btnInicio);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = preferences.edit();
+        btnInicio.setOnClickListener(this);
     }
-
-    public void onClickInicio(View v){
+    @Override
+    public void onClick(View v){
         String correo, contrasena;
         correo = etCorreo.getText().toString();
         contrasena = etContrasena.getText().toString();
@@ -76,7 +80,6 @@ public class InicioSesion extends AppCompatActivity {
     }
 
     public void logIn(){
-        editor.putBoolean("isLogged", true);
         editor.apply();
         startActivity(new Intent(this, MainActivity.class));
         finish();

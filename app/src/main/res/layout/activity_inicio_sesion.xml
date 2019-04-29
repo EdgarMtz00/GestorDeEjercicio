@@ -35,7 +35,6 @@
         android:hint="@string/contrasena"/>
     <Button
         android:id="@+id/btnInicio"
-        android:onClick="onClickInicio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/etContrasena"

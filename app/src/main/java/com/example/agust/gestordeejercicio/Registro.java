@@ -25,7 +25,7 @@ import java.util.Set;
 public class Registro extends AppCompatActivity {
     EditText etContrasena, etCorreo, etPwd, etEstatura, etPeso, etEdad;
     SharedPreferences preferences;
-    String url = "http://192.168.1.69/ServerEjercicio/Registrar.php";
+    String url = "http://192.168.1.86/ServerEjercicio/Registrar.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +48,6 @@ public class Registro extends AppCompatActivity {
             estatura = etEstatura.getText().toString();
             peso = etPeso.getText().toString();
             String[] input ={correo, pwd, edad, estatura, peso};
-
             if(Utils.validateText(input)) {
                 JSONObject data = new JSONObject();
                 try {
@@ -103,6 +102,7 @@ public class Registro extends AppCompatActivity {
             e.printStackTrace();
         }
         SharedPreferences.Editor editor = preferences.edit();
+        //TODO: adapar registro a nueva preferencias
         editor.putBoolean("isLogged", true);
         editor.apply();
         startActivity(new Intent(this, MainActivity.class));

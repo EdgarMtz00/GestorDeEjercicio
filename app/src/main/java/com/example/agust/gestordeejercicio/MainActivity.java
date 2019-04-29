@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,13 +25,12 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if (preferences.getBoolean("isLogged", false)){
-        //if(!preferences.getBoolean("isLogged", false)){
-            //conectar usuario
-        }else{
+        if (preferences.getInt("userId", -1) == -1){
             Intent Sesion = new Intent(this, InicioSesion.class);
             startActivity(Sesion);
             finish();
         }
+        String userid = String.valueOf(preferences.getInt("userId", -1));
+        Toast.makeText(this, userid , Toast.LENGTH_SHORT).show();
     }
 }
