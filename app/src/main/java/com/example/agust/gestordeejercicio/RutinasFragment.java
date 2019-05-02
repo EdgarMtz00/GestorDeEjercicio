@@ -22,9 +22,14 @@ import org.json.JSONArray;
 
 
 public class RutinasFragment extends Fragment {
-    ListView listView;
-    ListAdapter listAdapter;
+    ListView listView;          //lista del fragment
+    ListAdapter listAdapter;    //Adapta la informacion para ser mostrada en la lista
 
+    /**
+     * Al iniciar el fragment, pide a la API la rutina del usuario,
+     * y una vez obtenida prepara un adapter para la lista con la
+     * informacion de la rutina
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -38,7 +43,8 @@ public class RutinasFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
-                        inflate(jsonArray);
+                        listAdapter.setRutinas(jsonArray);
+                        listView.setAdapter(listAdapter);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -50,10 +56,5 @@ public class RutinasFragment extends Fragment {
         rQueue.add(arrayRequest);
         rQueue.start();
         return v;
-    }
-
-    private void inflate(JSONArray jsonArray){
-        listAdapter.setRutinas(jsonArray);
-        listView.setAdapter(listAdapter);
     }
 }

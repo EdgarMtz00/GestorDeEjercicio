@@ -12,9 +12,9 @@ public class PageAdapter extends FragmentStatePagerAdapter {
 
     /**
      * @param position:
-     * Numero del item a regresar
+     * Numero del item seleccionado
      * @return:
-     * Fragment
+     * Fragment correspondiente al tab seleccionado
      */
     @Override
     public Fragment getItem(int position) {
@@ -27,6 +27,12 @@ public class PageAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    /**
+     * @param position
+     * Numero del item seleccionado
+     * @return
+     * Titulo de los tabs de la aplicacion
+     */
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
@@ -39,6 +45,10 @@ public class PageAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    /**
+     * @return
+     * Cantidad de tabs en la aplicacion
+     */
     @Override
     public int getCount() {return 4;}
 }

@@ -33,30 +33,43 @@ public class ConfiguracionFragment extends Fragment {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
+    public View onCreateView(LayoutInflater inflater,
+                 ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_configuracion, container, false);
-        etPeso = v.findViewById(R.id.peso);
-        etEdad = v.findViewById(R.id.edad);
-        etEstatura = v.findViewById(R.id.estatura);
-        etPeso.addTextChangedListener(textWatcher);
-        etEstatura.addTextChangedListener(textWatcher);
-        etEdad.addTextChangedListener(textWatcher);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
-        editor = preferences.edit();
-        btnCerrar = v.findViewById(R.id.btnCerrarSesion);
+        etPeso = v.findViewById(R.id.peso);             //campo para ingresar peso
+        etEdad = v.findViewById(R.id.edad);             //campo para ingresar edad
+        etEstatura = v.findViewById(R.id.estatura);     //campo para ingresar estatura
+        etPeso.addTextChangedListener(textWatcher);     //
+        etEstatura.addTextChangedListener(textWatcher); //Vincular campos de texto con TextWatcher
+        etEdad.addTextChangedListener(textWatcher);     //
+
+        preferences = PreferenceManager.getDefaultSharedPreferences
+                (this.getActivity().getApplicationContext());       //Preferencias de la aplicacion
+        editor = preferences.edit();                                //Editor de preferencias
+
+        btnCerrar = v.findViewById(R.id.btnCerrarSesion); //Boton para cerrar sesion
+        btnCambio = v.findViewById(R.id.btnCambio);       //Boton para guardar cambios
+
+        /*
+          Evento accionado cuando se presiona btnCerrar
+          elimina la id del usuario de las preferencias
+          y regresa a la activity para iniciar sesion
+         */
         btnCerrar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+        public void onClick(View v) {
                 editor.remove("userId");
                 editor.apply();
                 startActivity(new Intent(getActivity(), InicioSesion.class));
                 getActivity().finish();
             }
         });
-        btnCambio = v.findViewById(R.id.btnCambio);
+
+        /*
+          Evento accionado cuando se presiona btnCambio obtiene los valores de los campos,
+          los convierte a un objeto json y realiza una peticion a la API para
+          actualizar al usuario
+         */
         btnCambio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +113,10 @@ public class ConfiguracionFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Objeto para revisar cuando se cambia
+     * un campo de texto.
+     */
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -107,6 +124,10 @@ public class ConfiguracionFragment extends Fragment {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
+        /**
+         * Hace visible el boton para guardar cambios
+         * una vez se ingrese un nuevo valor.
+         */
         @Override
         public void afterTextChanged(Editable s) {
             btnCambio.setVisibility(View.VISIBLE);

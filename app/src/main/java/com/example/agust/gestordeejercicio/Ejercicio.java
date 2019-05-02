@@ -1,5 +1,8 @@
 package com.example.agust.gestordeejercicio;
 
+/**
+ * Objeto modelo de los ejercicios de dados por la API
+ */
 public class Ejercicio {
     private int id;
     private String nombre;
@@ -16,6 +19,10 @@ public class Ejercicio {
         this.instruccion = instruccion;
         this.dificultad = dificultad;
     }
+
+    /**
+     * Funciones para obtener y establecer los datos del ejercicio
+     */
 
     public int getId() {
         return id;

@@ -1,5 +1,8 @@
 package com.example.agust.gestordeejercicio;
 
+/**
+ * Objeto modelo de las rutinas de dadas por la API
+ */
 public class Rutina {
      private Ejercicio ejercicio;
      private String dia;
@@ -16,6 +19,10 @@ public class Rutina {
         this.id = id;
         this.repeticiones = repeticiones;
     }
+
+    /**
+     * Funciones para obtener y establecer los datos de la rutina
+     */
 
     public Ejercicio getEjercicio() {
         return ejercicio;

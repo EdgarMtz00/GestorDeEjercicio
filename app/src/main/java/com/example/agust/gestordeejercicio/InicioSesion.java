@@ -21,11 +21,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class InicioSesion extends AppCompatActivity implements View.OnClickListener {
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    EditText etCorreo, etContrasena;
-    Button btnInicio;
-    String url = "http://192.168.1.86/ServerEjercicio/IniciarSesion.php";
+    SharedPreferences preferences; //Preferencias de la aplicacion
+    SharedPreferences.Editor editor; //Editor de preferencias
+    EditText etCorreo, etContrasena; //Campos de corre y contraseña
+    Button btnInicio; //Boton para iniciar sesion
+    String url = "http://192.168.1.86/ServerEjercicio/IniciarSesion.php"; //Url de la API
+
+
+    /**
+     * Inicializa elementos del activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +42,12 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         editor = preferences.edit();
         btnInicio.setOnClickListener(this);
     }
+
+    /**
+     * Evento accionado cuando se presiona btnInicio
+     * obtiene informacion de inicio de sesion de la API
+     * y llama a realizar el logIn.
+     */
     @Override
     public void onClick(View v){
         String correo, contrasena;
@@ -51,22 +62,12 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject jsonObject) {
-                                try {
-                                    if(jsonObject.getBoolean("logIn")){
-                                        editor.putInt("userId", jsonObject.getInt("id"));
-                                        logIn();
-                                    }else{
-                                        retry();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                logIn(jsonObject);
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError volleyError) {
-
                             }
                         });
                 RequestQueue rQueue = Volley.newRequestQueue(this);
@@ -76,15 +77,33 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                 e.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * Guarda el id del usuario en las preferencias y accede a MainActivity
+     * @param jsonObject: json obtenido de la peticion a la API
+     */
+    public void logIn(JSONObject jsonObject){
+        try {
+            if(jsonObject.getBoolean("logIn")){
+                editor.putInt("userId", jsonObject.getInt("id"));
+                editor.apply();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }else{
+                retry();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void logIn(){
-        editor.apply();
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-    }
 
+    /**
+     * Notifica al usuario si falla el inicio de sesion
+     */
     public void retry(){
         Toast.makeText(this, "Bad Credentials", Toast.LENGTH_SHORT).show();
     }

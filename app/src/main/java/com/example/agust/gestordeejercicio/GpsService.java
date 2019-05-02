@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 public class GpsService extends Service {
     private LocationManager locationManager;
@@ -35,18 +36,12 @@ public class GpsService extends Service {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         gpsListener = new GpsListener();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return START_STICKY;
+            return START_NOT_STICKY;
+        }else {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 10, gpsListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, gpsListener);
+            return START_NOT_STICKY;
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 10, gpsListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, gpsListener);
-        return START_NOT_STICKY;
     }
 
     private Runnable sendUpdatesToUI = new Runnable() {
@@ -83,6 +78,21 @@ public class GpsService extends Service {
             UIhandler.postDelayed(sendUpdatesToUI, 0);
         }
 
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+
         double distanceBetweenTwoPoint(double srcLat, double srcLng, double desLat, double desLng) {
             double earthRadius = 3958.75;
             double dLat = Math.toRadians(desLat - srcLat);
@@ -99,16 +109,6 @@ public class GpsService extends Service {
             return (int) (dist * meterConversion);
         }
 
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
 
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
     }
 }

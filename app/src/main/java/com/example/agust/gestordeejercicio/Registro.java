@@ -23,9 +23,12 @@ import org.json.JSONObject;
 import java.util.Set;
 
 public class Registro extends AppCompatActivity {
+    //Campos de informacion del usuario
     EditText etContrasena, etCorreo, etPwd, etEstatura, etPeso, etEdad;
-    SharedPreferences preferences;
-    String url = "http://192.168.1.86/ServerEjercicio/Registrar.php";
+
+    SharedPreferences preferences; //preferencias de la aplicacion
+    String url = "http://192.168.1.86/ServerEjercicio/Registrar.php"; //URL de la API
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,13 @@ public class Registro extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
+    /**
+     * Evento accionado cuando se presiona el boton de registrar
+     * obtiene los datos ingresados en las campos
+     * realiza una peticion a la API para crear el usuario
+     * e inicia sesion en la aplicacion
+     * @param v
+     */
     public void onClickRegistro(View v){
         String correo, pwd,estatura, edad, peso;
         if(etContrasena.getText().toString().equals(etPwd.getText().toString())) {
@@ -52,7 +62,7 @@ public class Registro extends AppCompatActivity {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("correo", correo);
-                    data.put("pwd", pwd);
+                    data.put("contrasena", pwd);
                     data.put("edad", Integer.parseInt(edad));
                     data.put("peso", Integer.parseInt(peso));
                     data.put("estatura", Integer.parseInt(estatura));
@@ -95,17 +105,19 @@ public class Registro extends AppCompatActivity {
 
     }
 
+    /**
+     * Inicia sesion con el id del usuario recien creado
+     */
     public void logIn(JSONObject data){
         try {
             Toast.makeText(this, "Registrado" + data.getString("msg"), Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("userId", data.getInt("id"));
+            editor.apply();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        SharedPreferences.Editor editor = preferences.edit();
-        //TODO: adapar registro a nueva preferencias
-        editor.putBoolean("isLogged", true);
-        editor.apply();
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
     }
 }

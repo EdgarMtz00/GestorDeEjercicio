@@ -14,10 +14,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ListAdapter extends BaseAdapter {
-    private Context context;
-    private ArrayList<Rutina> rutinas;
-    private ArrayList<Ejercicio> ejercicios;
-    private boolean type;
+    private Context context;                    //contexto del fragment en el que se instance
+    private ArrayList<Rutina> rutinas;          //Lista de una rutina
+    private ArrayList<Ejercicio> ejercicios;    //Lista de ejercicios
+    private boolean type;                       //Define que lista se usara
 
     public ListAdapter(Context context) {
         this.context = context;
@@ -25,6 +25,10 @@ public class ListAdapter extends BaseAdapter {
         ejercicios = new ArrayList<>();
     }
 
+    /**
+     * Toma un objeto json y lo convierte
+     * a un objeto de rutina
+     */
     private Rutina rutinaParse(JSONObject jsonRutina) throws JSONException {
         Rutina rutina = new Rutina();
         rutina.setDia(jsonRutina.getString("dia"));
@@ -32,6 +36,10 @@ public class ListAdapter extends BaseAdapter {
         return rutina;
     }
 
+    /**
+     * Genera la lista de rutinas a partir de
+     * un arreglo Json de objetos
+     */
     public void setRutinas(JSONArray jsonRutinas){
         type = true;
         for(int i = 0; i < jsonRutinas.length(); i++){
@@ -44,16 +52,29 @@ public class ListAdapter extends BaseAdapter {
         }
     }
 
+    /**
+     * Genera la lista de rutinas a partir de
+     * un arreglo Json de objetos
+     */
     public void setEjercicios(ArrayList<Ejercicio> ejercicios){
         type = false;
         this.ejercicios = ejercicios;
     }
 
+    /**
+     * @return
+     * La cantidad de objetos que almacenara la lista
+     */
     @Override
     public int getCount() {
         return (type)? rutinas.size() : ejercicios.size();
     }
 
+    /**
+     * @return
+     * El objeto correspondiente a una posicion
+     * dada en la lista
+     */
     @Override
     public Object getItem(int position) {
         return (type)? rutinas.get(position) : ejercicios.get(position);
@@ -64,6 +85,11 @@ public class ListAdapter extends BaseAdapter {
         return position;
     }
 
+    /**
+     * @return
+     * Una vista correspondiente al tipo de lista con
+     * la informacion del objeto en la posicion dada.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater vLink = LayoutInflater.from(context);

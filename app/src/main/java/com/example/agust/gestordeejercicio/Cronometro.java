@@ -34,7 +34,6 @@ import java.sql.Time;
  * progreso: Segundos transcurridos desde que se inicio el cronómetro.
  * progresoTemp: Almacena el tiempo transcurrido desde que se inició el cronómetro hasta que se presionó btnPausa.
  */
-
 public class Cronometro extends Fragment {
     boolean clickInicio, clickPausa;
     TextView txtDistancia;
@@ -66,7 +65,6 @@ public class Cronometro extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_cronometro, container, false);
         txtDistancia = v.findViewById(R.id.txtDistancia);
         btnInicio = v.findViewById(R.id.btnInicio);
@@ -77,10 +75,10 @@ public class Cronometro extends Fragment {
         clickPausa = true;
         prgReloj.setMax(60); //Establece 60 como el valor maximo de prgReloj
 
-        if (ContextCompat.checkSelfPermission(getActivity(),
+/*        if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-/*
+
             // Asking user if explanation is needed
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -96,12 +94,14 @@ public class Cronometro extends Fragment {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
-  */      }
+         }*/
 
+        /*
+            Evento activado cuando se presiona btnInicio
+            inicia o detine el cronometro  y el progreso de prgReloj
+            basado en el valor de click
+         */
         btnInicio.setOnClickListener(new View.OnClickListener() {
-            /**
-             * onClick: basado en el valor de click inicia o detiene el cronometro y el metodo timerProgress
-             */
             @Override
             public void onClick(View v) {
                 if(clickInicio){
@@ -123,6 +123,11 @@ public class Cronometro extends Fragment {
             }
         });
 
+        /*
+            Evento activado cuando se presiona btnPausa
+            pausa o reanuda el cronometro  y el progreso de prgReloj
+            basado en el valor de clickPausa
+         */
         btnPausa.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
