@@ -88,7 +88,7 @@ public class ConfiguracionFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                String url = "http://192.168.1.86/serverejercicio/usuario.php";
+                String url = "http://192.168.1.73/serverejercicio/usuario.php";
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonObject,
                         new Response.Listener<JSONObject>() {

@@ -1,6 +1,7 @@
 package com.example.agust.gestordeejercicio;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -24,6 +26,8 @@ import org.json.JSONArray;
 public class RutinasFragment extends Fragment {
     ListView listView;          //lista del fragment
     ListAdapter listAdapter;    //Adapta la informacion para ser mostrada en la lista
+    Button btnCrear;
+    Intent crearRutina;
 
     /**
      * Al iniciar el fragment, pide a la API la rutina del usuario,
@@ -36,8 +40,10 @@ public class RutinasFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_rutinas, container, false);
         listView = v.findViewById(R.id.listView);
         listAdapter = new ListAdapter(getContext());
+        btnCrear = v.findViewById(R.id.btnCrear);
+        crearRutina = new Intent(this.getActivity(), CrearRutina.class);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
-        String url ="http://192.168.1.86/serverejercicio/rutinas.php?idUsuario=" + preferences.getInt("userId", -1);
+        String url ="http://192.168.1.73/serverejercicio/rutinas.php?idUsuario=" + preferences.getInt("userId", -1);
         JSONArray jsonArray = new JSONArray();
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, jsonArray,
                 new Response.Listener<JSONArray>() {
@@ -55,6 +61,12 @@ public class RutinasFragment extends Fragment {
         RequestQueue rQueue = Volley.newRequestQueue(getContext());
         rQueue.add(arrayRequest);
         rQueue.start();
+        btnCrear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(crearRutina);
+            }
+        });
         return v;
     }
 }

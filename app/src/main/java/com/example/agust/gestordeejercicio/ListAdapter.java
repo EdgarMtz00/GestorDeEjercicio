@@ -29,11 +29,18 @@ public class ListAdapter extends BaseAdapter {
      * Toma un objeto json y lo convierte
      * a un objeto de rutina
      */
-    private Rutina rutinaParse(JSONObject jsonRutina) throws JSONException {
+    private Rutina rutinaParse(JSONObject j) throws JSONException {
         Rutina rutina = new Rutina();
-        rutina.setDia(jsonRutina.getString("dia"));
-        rutina.setRepeticiones(jsonRutina.getString("repeticiones"));
+        rutina.setDia(j.getString("dia"));
+        rutina.setRepeticiones(j.getString("repeticiones"));
         return rutina;
+    }
+
+    private Ejercicio ejercicioParse(JSONObject j) throws JSONException {
+        Ejercicio ejercicio = new Ejercicio();
+        ejercicio.setNombre(j.getString("Nombre"));
+        ejercicio.setInstruccion(j.getString("Instrucciones"));
+        return ejercicio;
     }
 
     /**
@@ -56,9 +63,16 @@ public class ListAdapter extends BaseAdapter {
      * Genera la lista de rutinas a partir de
      * un arreglo Json de objetos
      */
-    public void setEjercicios(ArrayList<Ejercicio> ejercicios){
+    public void setEjercicios(JSONArray jsonEjercicios){
         type = false;
-        this.ejercicios = ejercicios;
+        for(int i = 0; i < jsonEjercicios.length(); i++){
+            try {
+                JSONObject jsonEjercicio = jsonEjercicios.getJSONObject(i);
+                ejercicios.add(ejercicioParse(jsonEjercicio));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
