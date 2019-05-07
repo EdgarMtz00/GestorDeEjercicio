@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
         am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY / (24 * 60), pendingIntent);
     }
 
     public void notificaciones(boolean active){
