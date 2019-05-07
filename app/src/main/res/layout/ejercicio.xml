@@ -30,5 +30,16 @@
                 android:layout_width="100dp"
                 android:layout_height="30dp" />
         </LinearLayout>
+    <TextView
+        android:id="@+id/txtRepeticiones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textSize="20sp"
+        android:text="hola"/>
 
+    <SeekBar
+        android:id="@+id/sbRepeticiones"
+        android:layout_width="300dp"
+        android:layout_height="30dp" />
     </LinearLayout>

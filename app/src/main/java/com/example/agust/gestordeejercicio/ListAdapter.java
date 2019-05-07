@@ -1,10 +1,12 @@
 package com.example.agust.gestordeejercicio;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -120,6 +122,23 @@ public class ListAdapter extends BaseAdapter {
             textView.setText(ejercicios.get(position).getNombre());
             textView = v.findViewById((R.id.txtInstruccion));
             textView.setText(ejercicios.get(position).getInstruccion());
+            final TextView txtRepeticiones = v.findViewById(R.id.txtRepeticiones);
+            SeekBar sbRepeticiones = v.findViewById(R.id.sbRepeticiones);
+            sbRepeticiones.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(@NonNull SeekBar seekBar, int progress, boolean fromUser) {
+                    txtRepeticiones.setText(String.valueOf(progress));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
         }
         return v;
     }
