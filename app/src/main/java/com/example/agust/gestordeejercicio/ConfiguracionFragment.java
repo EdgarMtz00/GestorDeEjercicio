@@ -88,7 +88,8 @@ public class ConfiguracionFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                String url = "http://192.168.1.73/serverejercicio/usuario.php";
+                String ip = preferences.getString("ip", "");
+                String url = "http://" + ip + "/ServerEjercicio/usuario.php"; //URL de la API
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonObject,
                         new Response.Listener<JSONObject>() {

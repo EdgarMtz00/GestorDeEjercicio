@@ -27,7 +27,8 @@ public class Registro extends AppCompatActivity {
     EditText etContrasena, etCorreo, etPwd, etEstatura, etPeso, etEdad;
 
     SharedPreferences preferences; //preferencias de la aplicacion
-    String url = "http://192.168.1.86/ServerEjercicio/Registrar.php"; //URL de la API
+    String ip = preferences.getString("ip", "");
+    String url = "http://" + ip + "/ServerEjercicio/Registrar.php"; //URL de la API
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

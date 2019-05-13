@@ -28,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("ip", "192.168.1.73");
+        editor.apply();
         if (preferences.getInt("userId", -1) == -1){
             Intent Sesion = new Intent(this, InicioSesion.class);
             startActivity(Sesion);

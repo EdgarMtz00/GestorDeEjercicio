@@ -25,7 +25,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     SharedPreferences.Editor editor; //Editor de preferencias
     EditText etCorreo, etContrasena; //Campos de corre y contraseña
     Button btnInicio; //Boton para iniciar sesion
-    String url = "http://192.168.1.73/ServerEjercicio/IniciarSesion.php"; //Url de la API
+    String url;
 
 
     /**
@@ -40,6 +40,8 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         btnInicio = findViewById(R.id.btnInicio);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = preferences.edit();
+        String ip = preferences.getString("ip", "");
+        url = "http://" + ip + "/ServerEjercicio/IniciarSesion.php"; //Url de la API
         btnInicio.setOnClickListener(this);
     }
 

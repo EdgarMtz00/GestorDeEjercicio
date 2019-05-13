@@ -1,5 +1,8 @@
 package com.example.agust.gestordeejercicio;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Objeto modelo de las rutinas de dadas por la API
  */
@@ -54,5 +57,16 @@ public class Rutina {
 
     public void setRepeticiones(String repeticiones) {
         this.repeticiones = repeticiones;
+    }
+
+    /**
+     * Toma un objeto json y lo convierte
+     * a un objeto de rutina
+     */
+    public static Rutina rutinaParse(JSONObject j) throws JSONException {
+        Rutina rutina = new Rutina();
+        rutina.setDia(j.getString("dia"));
+        rutina.setRepeticiones(j.getString("repeticiones"));
+        return rutina;
     }
 }

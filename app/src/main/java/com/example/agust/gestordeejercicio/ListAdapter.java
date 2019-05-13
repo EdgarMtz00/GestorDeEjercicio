@@ -1,6 +1,7 @@
 package com.example.agust.gestordeejercicio;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,24 +29,6 @@ public class ListAdapter extends BaseAdapter {
     }
 
     /**
-     * Toma un objeto json y lo convierte
-     * a un objeto de rutina
-     */
-    private Rutina rutinaParse(JSONObject j) throws JSONException {
-        Rutina rutina = new Rutina();
-        rutina.setDia(j.getString("dia"));
-        rutina.setRepeticiones(j.getString("repeticiones"));
-        return rutina;
-    }
-
-    private Ejercicio ejercicioParse(JSONObject j) throws JSONException {
-        Ejercicio ejercicio = new Ejercicio();
-        ejercicio.setNombre(j.getString("Nombre"));
-        ejercicio.setInstruccion(j.getString("Instrucciones"));
-        return ejercicio;
-    }
-
-    /**
      * Genera la lista de rutinas a partir de
      * un arreglo Json de objetos
      */
@@ -54,7 +37,7 @@ public class ListAdapter extends BaseAdapter {
         for(int i = 0; i < jsonRutinas.length(); i++){
             try {
                 JSONObject jsonRutina = jsonRutinas.getJSONObject(i);
-                rutinas.add(rutinaParse(jsonRutina));
+                rutinas.add(Rutina.rutinaParse(jsonRutina));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -70,7 +53,7 @@ public class ListAdapter extends BaseAdapter {
         for(int i = 0; i < jsonEjercicios.length(); i++){
             try {
                 JSONObject jsonEjercicio = jsonEjercicios.getJSONObject(i);
-                ejercicios.add(ejercicioParse(jsonEjercicio));
+                ejercicios.add(Ejercicio.ejercicioParse(jsonEjercicio));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -107,17 +90,17 @@ public class ListAdapter extends BaseAdapter {
      * la informacion del objeto en la posicion dada.
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater vLink = LayoutInflater.from(context);
-        View v;
         if(type) {
-            v = vLink.inflate(R.layout.rutina, null);
+            View v = vLink.inflate(R.layout.rutina, null);
             TextView textView = v.findViewById(R.id.txtDia);
             textView.setText(rutinas.get(position).getDia());
             textView = v.findViewById((R.id.txtRepeticiones));
             textView.setText(rutinas.get(position).getRepeticiones());
+            return v;
         }else{
-            v = vLink.inflate(R.layout.ejercicio, null);
+            final View v = vLink.inflate(R.layout.ejercicio, null);
             TextView textView = v.findViewById(R.id.txtNombre);
             textView.setText(ejercicios.get(position).getNombre());
             textView = v.findViewById((R.id.txtInstruccion));
@@ -128,6 +111,12 @@ public class ListAdapter extends BaseAdapter {
                 @Override
                 public void onProgressChanged(@NonNull SeekBar seekBar, int progress, boolean fromUser) {
                     txtRepeticiones.setText(String.valueOf(progress));
+                    ejercicios.get(position).setRepeticiones(progress);
+                    if(progress != 0){
+                        v.setBackgroundColor(Color.GREEN);
+                    }else{
+                        v.setBackgroundColor(Color.WHITE);
+                    }
                 }
 
                 @Override
@@ -139,7 +128,7 @@ public class ListAdapter extends BaseAdapter {
 
                 }
             });
+            return v;
         }
-        return v;
     }
 }

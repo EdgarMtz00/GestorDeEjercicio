@@ -1,5 +1,8 @@
 package com.example.agust.gestordeejercicio;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Objeto modelo de los ejercicios de dados por la API
  */
@@ -8,6 +11,15 @@ public class Ejercicio {
     private String nombre;
     private String instruccion;
     private  int dificultad;
+    private int repeticiones;
+
+    public int getRepeticiones() {
+        return repeticiones;
+    }
+
+    public void setRepeticiones(int repeticiones) {
+        this.repeticiones = repeticiones;
+    }
 
     public Ejercicio() {
         id = -1;
@@ -54,5 +66,21 @@ public class Ejercicio {
 
     public void setDificultad(int dificultad) {
         this.dificultad = dificultad;
+    }
+
+    public static Ejercicio ejercicioParse(JSONObject j) throws JSONException {
+        Ejercicio ejercicio = new Ejercicio();
+        ejercicio.setNombre(j.getString("Nombre"));
+        ejercicio.setInstruccion(j.getString("Instrucciones"));
+        return ejercicio;
+    }
+
+    public JSONObject JsonParse(int usuario, String dia) throws JSONException {
+        JSONObject res = new JSONObject();
+        res.put("idEjercicio", this.id);
+        res.put("idUsuario", usuario);
+        res.put("repeticiones", this.repeticiones);
+        res.put("dia", dia);
+        return res;
     }
 }

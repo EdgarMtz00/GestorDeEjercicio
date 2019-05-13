@@ -43,7 +43,8 @@ public class RutinasFragment extends Fragment {
         btnCrear = v.findViewById(R.id.btnCrear);
         crearRutina = new Intent(this.getActivity(), CrearRutina.class);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
-        String url ="http://192.168.1.73/serverejercicio/rutinas.php?idUsuario=" + preferences.getInt("userId", -1);
+        String ip = preferences.getString("ip", "");
+        String url = "http://" + ip + "/serverejercicio/rutinas.php?idUsuario=" + preferences.getInt("userId", -1);
         JSONArray jsonArray = new JSONArray();
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, jsonArray,
                 new Response.Listener<JSONArray>() {
