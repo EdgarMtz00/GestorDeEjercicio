@@ -50,6 +50,7 @@ public class ListAdapter extends BaseAdapter {
      */
     public void setEjercicios(JSONArray jsonEjercicios){
         type = false;
+        ejercicios = new ArrayList<>();
         for(int i = 0; i < jsonEjercicios.length(); i++){
             try {
                 JSONObject jsonEjercicio = jsonEjercicios.getJSONObject(i);

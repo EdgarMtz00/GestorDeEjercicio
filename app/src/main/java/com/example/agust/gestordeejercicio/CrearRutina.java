@@ -2,6 +2,7 @@ package com.example.agust.gestordeejercicio;
 
 import android.app.VoiceInteractor;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -29,28 +30,32 @@ public class CrearRutina extends AppCompatActivity {
     ListView lvEjercicios;
     ListAdapter listAdapter;
     TextView txtDia;
+    int numDia = 0;
     static String[] dias = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
     Button btnSig;
+    JSONArray ejercicios;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_rutina);
         lvEjercicios = findViewById(R.id.lvEjercicios);
         txtDia = findViewById(R.id.txtDia);
-        txtDia.setText(dias[0]);
+        txtDia.setText(dias[numDia]);
         btnSig = findViewById(R.id.btnSig);
         listAdapter = new ListAdapter(this);
         final Context ctx = this;
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String ip = preferences.getString("ip", "");
         String url ="http://" + ip + "/serverejercicio/ejercicios.php";
-        JSONArray jsonArray = new JSONArray();
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, jsonArray,
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, new JSONArray(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         listAdapter.setEjercicios(jsonArray);
                         lvEjercicios.setAdapter(listAdapter);
+                        ejercicios = jsonArray;
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -58,6 +63,7 @@ public class CrearRutina extends AppCompatActivity {
 
             }
         });
+
         RequestQueue rQueue = Volley.newRequestQueue(this);
         rQueue.add(arrayRequest);
         rQueue.start();
@@ -77,7 +83,7 @@ public class CrearRutina extends AppCompatActivity {
                 for (int i = 0; i < listAdapter.getCount(); i++){
                     Ejercicio ejercicio = (Ejercicio) listAdapter.getItem(i);
                     if(ejercicio.getRepeticiones() > 0) {
-                        int idUsuario = preferences.getInt("userID", -1);
+                        int idUsuario = preferences.getInt("userId", -1);
                         String dia = txtDia.getText().toString();
                         try {
                             rutina.put(ejercicio.JsonParse(idUsuario, dia));
@@ -91,19 +97,26 @@ public class CrearRutina extends AppCompatActivity {
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            
+                            listAdapter.setEjercicios(ejercicios);
+                            lvEjercicios.setAdapter(listAdapter);
+                            numDia++;
+                            if(numDia < dias.length) {
+                                txtDia.setText(dias[numDia]);
+                            }else{
+                                startActivity(new Intent(ctx, MainActivity.class));
+                                finish();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            Toast.makeText(ctx, "error", Toast.LENGTH_SHORT).show();
                         }
                    });
                 RequestQueue rQueue = Volley.newRequestQueue(ctx);
                 rQueue.add(postRutina);
                 rQueue.start();
-                lvEjercicios.setAdapter(listAdapter);
             }
         });
     }

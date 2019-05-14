@@ -72,6 +72,8 @@ public class Ejercicio {
         Ejercicio ejercicio = new Ejercicio();
         ejercicio.setNombre(j.getString("Nombre"));
         ejercicio.setInstruccion(j.getString("Instrucciones"));
+        ejercicio.setId(j.getInt("ID"));
+        ejercicio.setDificultad(j.getInt("Dificultad"));
         return ejercicio;
     }
 
