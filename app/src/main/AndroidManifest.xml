@@ -17,13 +17,17 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".InicioSesion" />
         <activity android:name=".Registro" />
-        <activity android:name=".CrearRutina"></activity>
-        <receiver android:name="com.example.agust.gestordeejercicio.Receiver" />
+        <activity android:name=".CrearRutina" />
+
+        <receiver android:name=".Receiver" />
+
+        <activity android:name=".ContadorRepeticiones"></activity>
     </application>
 
 </manifest>
