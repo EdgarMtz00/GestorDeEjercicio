@@ -13,64 +13,97 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:src="@mipmap/ic_launcher"/>
+
     <EditText
         android:id="@+id/etCorreo"
-        android:layout_width="180dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/image"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginRight="30dp"
+        android:hint="@string/correo_electronico"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:inputType="text"
+        android:maxLines="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="45dp"
-        android:maxLines="1"
-        android:hint="@string/correo_electronico"  />
+        app:layout_constraintTop_toBottomOf="@+id/image" />
+
     <EditText
         android:id="@+id/etContrasena"
-        android:layout_width="180dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/etCorreo"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:hint="@string/contrasena"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:inputType="textPassword"
+        android:maxLines="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp"
-        android:maxLines="1"
-        android:hint="@string/contrasena"/>
+        app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
+
     <Button
         android:id="@+id/btnInicio"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/etContrasena"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="80dp"
+        android:background="#344955"
+        android:text="@string/iniciar_sesion"
+        android:textColor="#FFFFFF"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp"
-        android:text="@string/iniciar_sesion"/>
+        app:layout_constraintTop_toBottomOf="@+id/etContrasena" />
+
     <TextView
         android:id="@+id/txtOlvidar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="80dp"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintTop_toBottomOf="@+id/btnInicio"
+        android:text="@string/contrasena_olvidada"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp"
-        android:text="@string/contrasena_olvidada"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnInicio" />
+
     <Button
         android:id="@+id/btnFacebook"
-        android:onClick="onClickFacebook"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/txtOlvidar"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="80dp"
+        android:onClick="onClickFacebook"
+        android:text="@string/inicio_facebook"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:background="#3B5998"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
-        android:text="@string/inicio_facebook"/>
+        app:layout_constraintTop_toBottomOf="@+id/txtOlvidar" />
+
     <Button
         android:id="@+id/btnRegistro"
-        android:onClick="onClickRegistro"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btnFacebook"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="80dp"
+        android:onClick="onClickRegistro"
+        android:text="@string/registrarse"
+        android:background="#344955"
+        android:textColor="#FFFFFF"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="5dp"
-        android:text="@string/registrarse"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnFacebook" />
 </android.support.constraint.ConstraintLayout>
