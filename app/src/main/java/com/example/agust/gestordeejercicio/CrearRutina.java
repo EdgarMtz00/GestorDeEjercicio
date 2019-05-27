@@ -46,7 +46,7 @@ public class CrearRutina extends AppCompatActivity {
         listAdapter = new ListAdapter(this);
         final Context ctx = this;
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        String ip = preferences.getString("ip", "");
+        final String ip = preferences.getString("ip", "");
         String url ="http://" + ip + "/serverejercicio/ejercicios.php";
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, new JSONArray(),
@@ -83,7 +83,7 @@ public class CrearRutina extends AppCompatActivity {
                 for (int i = 0; i < listAdapter.getCount(); i++){
                     Ejercicio ejercicio = (Ejercicio) listAdapter.getItem(i);
                     if(ejercicio.getRepeticiones() > 0) {
-                        int idUsuario = preferences.getInt("userId", -1);
+                        Long idUsuario = preferences.getLong("userId", -1);
                         String dia = txtDia.getText().toString();
                         try {
                             rutina.put(ejercicio.JsonParse(idUsuario, dia));
@@ -92,7 +92,7 @@ public class CrearRutina extends AppCompatActivity {
                         }
                     }
                 }
-                String url ="http://192.168.1.73/serverejercicio/rutinas.php";
+                String url ="http://" + ip + "/serverejercicio/rutinas.php";
                 JsonArrayRequest postRutina = new JsonArrayRequest(Request.Method.POST, url, rutina,
                     new Response.Listener<JSONArray>() {
                         @Override

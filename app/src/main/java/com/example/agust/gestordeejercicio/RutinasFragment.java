@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -35,7 +36,7 @@ public class RutinasFragment extends Fragment {
      * informacion de la rutina
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_rutinas, container, false);
         listView = v.findViewById(R.id.listView);
@@ -44,7 +45,7 @@ public class RutinasFragment extends Fragment {
         crearRutina = new Intent(this.getActivity(), CrearRutina.class);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         String ip = preferences.getString("ip", "");
-        String url = "http://" + ip + "/serverejercicio/rutinas.php?idUsuario=" + preferences.getInt("userId", -1);
+        String url = "http://" + ip + "/serverejercicio/rutinas.php?idUsuario=" + preferences.getLong("userId", -1);
         JSONArray jsonArray = new JSONArray();
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, jsonArray,
                 new Response.Listener<JSONArray>() {
@@ -66,6 +67,18 @@ public class RutinasFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(crearRutina);
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Rutina rutina = (Rutina) listAdapter.getItem(position);
+                Ejercicio ejercicio = rutina. getEjercicio();
+                Intent contarRepeticiones = new Intent(getActivity(), ContadorRepeticiones.class);
+                contarRepeticiones.putExtra("Nombre", ejercicio.getNombre());
+                contarRepeticiones.putExtra("Instruccion", ejercicio.getInstruccion());
+                contarRepeticiones.putExtra("Repeticiones", rutina.getRepeticiones());
+                startActivity(contarRepeticiones);
             }
         });
         return v;

@@ -1,5 +1,6 @@
 package com.example.agust.gestordeejercicio;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -16,6 +17,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +31,17 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     SharedPreferences preferences; //Preferencias de la aplicacion
     SharedPreferences.Editor editor; //Editor de preferencias
     EditText etCorreo, etContrasena; //Campos de corre y contraseña
-    Button btnInicio; //Boton para iniciar sesion
+    Button btnInicio;
+    LoginButton loginButton; //Boton para iniciar sesion
     String url;
+    Context ctx = this;
+    CallbackManager callbackManager = CallbackManager.Factory.create();
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     /**
      * Inicializa elementos del activity
@@ -43,7 +58,36 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         String ip = preferences.getString("ip", "");
         url = "http://" + ip + "/ServerEjercicio/IniciarSesion.php"; //Url de la API
         btnInicio.setOnClickListener(this);
+
+
+
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Intent intent = new Intent(ctx, DatosUsuario.class);
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                String id = accessToken.getUserId();
+                intent.putExtra("id", id);
+                editor.putLong("userId", Long.parseLong(id));
+                editor.apply();
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+            }
+        });
     }
+
 
     /**
      * Evento accionado cuando se presiona btnInicio
@@ -89,7 +133,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     public void logIn(JSONObject jsonObject){
         try {
             if(jsonObject.getBoolean("logIn")){
-                editor.putInt("userId", jsonObject.getInt("id"));
+                editor.putLong("userId", jsonObject.getInt("id"));
                 editor.apply();
                 startActivity(new Intent(this, MainActivity.class));
                 finish();

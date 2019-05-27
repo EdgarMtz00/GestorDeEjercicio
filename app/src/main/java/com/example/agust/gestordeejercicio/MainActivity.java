@@ -29,20 +29,20 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("ip", "192.168.1.73");
+        editor.putString("ip", "192.168.1.76");
         editor.apply();
-        if (preferences.getInt("userId", -1) == -1){
-            Intent Sesion = new Intent(this, ContadorRepeticiones.class);
+        if (preferences.getLong("userId", -1) == -1){
+            Intent Sesion = new Intent(this, InicioSesion.class);
             startActivity(Sesion);
             finish();
         }
-        String userid = String.valueOf(preferences.getInt("userId", -1));
+        String userid = String.valueOf(preferences.getLong("userId", -1));
         Toast.makeText(this, userid , Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(MainActivity.this, Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
         am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY / (24 * 60), pendingIntent);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     public void notificaciones(boolean active){

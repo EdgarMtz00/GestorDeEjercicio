@@ -17,4 +17,8 @@
     <string name="nombre">Nombre</string>
     <string name="eliminar_rutina">Eliminar   de mi rutina</string>
     <string name="crear_rutina">Crear nueva rutina</string>
+    <string name="facebook_app_id">2749026798504952</string>
+    <string name="fb_login_protocol_scheme">fb2749026798504952</string>
+    <string name="guardar_cambios">Guardar Cambios</string>
+    <string name="txt_inicio">Antes de comenzar ingresa tus datos para configurar tus rutinas</string>
 </resources>

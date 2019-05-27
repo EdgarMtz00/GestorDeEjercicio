@@ -77,7 +77,7 @@ public class Ejercicio {
         return ejercicio;
     }
 
-    public JSONObject JsonParse(int usuario, String dia) throws JSONException {
+    public JSONObject JsonParse(Long usuario, String dia) throws JSONException {
         JSONObject res = new JSONObject();
         res.put("idEjercicio", this.id);
         res.put("idUsuario", usuario);

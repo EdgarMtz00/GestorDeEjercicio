@@ -27,8 +27,7 @@ public class Registro extends AppCompatActivity {
     EditText etContrasena, etCorreo, etPwd, etEstatura, etPeso, etEdad;
 
     SharedPreferences preferences; //preferencias de la aplicacion
-    String ip = preferences.getString("ip", "");
-    String url = "http://" + ip + "/ServerEjercicio/Registrar.php"; //URL de la API
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +40,8 @@ public class Registro extends AppCompatActivity {
         etPeso = findViewById(R.id.etPeso);
         etEdad = findViewById(R.id.etEdad);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String ip = preferences.getString("ip", "");
+        url = "http://" + ip + "/ServerEjercicio/Registrar.php"; //URL de la API
     }
 
     /**
@@ -68,7 +69,6 @@ public class Registro extends AppCompatActivity {
                     data.put("peso", Integer.parseInt(peso));
                     data.put("estatura", Integer.parseInt(estatura));
 
-                    Toast.makeText(this, "hola", Toast.LENGTH_SHORT).show();
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
                             new Response.Listener<JSONObject>() {
                                 @Override
@@ -94,17 +94,11 @@ public class Registro extends AppCompatActivity {
         }
     }
 
-    public void onClickFacebook(View v){
-
-    }
 
     public void help(View v){
 
     }
 
-    public void terminos(View v){
-
-    }
 
     /**
      * Inicia sesion con el id del usuario recien creado
@@ -113,7 +107,7 @@ public class Registro extends AppCompatActivity {
         try {
             Toast.makeText(this, "Registrado" + data.getString("msg"), Toast.LENGTH_SHORT).show();
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("userId", data.getInt("id"));
+            editor.putLong("userId", data.getInt("id"));
             editor.apply();
             startActivity(new Intent(this, MainActivity.class));
             finish();

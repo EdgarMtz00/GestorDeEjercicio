@@ -1,49 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConfiguracionFragment">
-    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    <Switch
-        android:id="@+id/notificaciones"
-        android:layout_width="82dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@id/textView" />
-
+    tools:context=".DatosUsuario">
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtInicio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="70dp"
-        android:text="@string/notificaciones"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:text="@string/txt_inicio"
+        android:textSize="18sp" />
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="50dp"
-        android:text="@string/configurar_informaci_n_personal"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/edad"
         android:layout_width="wrap_content"
         android:layout_height="29dp"
         android:layout_marginStart="60dp"
@@ -52,10 +21,10 @@
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@id/txtInicio" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/estatura"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -67,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edad" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/peso"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -78,23 +47,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/estatura" />
 
-
-    <Button
-        android:id="@+id/btnCerrarSesion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="100dp"
-        android:text="Cerrar sesión"
-        android:background="#344955"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/peso" />
-
     <EditText
-        android:id="@+id/peso"
+        android:id="@+id/etPeso"
         android:lines="1"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
@@ -107,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/estatura" />
 
     <EditText
-        android:id="@+id/estatura"
+        android:id="@+id/etEstatura"
         android:lines="1"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
@@ -120,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edad" />
 
     <EditText
-        android:id="@+id/edad"
+        android:id="@+id/etEdad"
         android:lines="1"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
@@ -130,16 +84,16 @@
         android:inputType="number"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@id/txtInicio" />
 
     <Button
-        android:id="@+id/btnCambio"
+        android:id="@+id/btnDatos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/estatura"
-        app:layout_constraintBottom_toBottomOf="@id/estatura"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPeso"
         android:layout_marginStart="30dp"
-        android:text="@string/guardar_cambios"
-        android:visibility="gone" />
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+        android:layout_marginTop="20dp"
+        android:text="@string/guardar_cambios" />
+</android.support.constraint.ConstraintLayout>
