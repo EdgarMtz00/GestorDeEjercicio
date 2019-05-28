@@ -74,7 +74,32 @@ public class Metas extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK){
-                
+                int repeticiones = data.getIntExtra("repeticiones", -1);
+                Long id = preferences.getLong("userId", -1);
+                String ip = preferences.getString("ip", "");
+                String url = "http://" + ip + "/serverejercicio/metas.php";
+                JSONObject request = new JSONObject();
+                try {
+                    request.put("idUsuario", String.valueOf(id));
+                    request.put("repeticiones", repeticiones);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                JsonObjectRequest putRepeticion = new JsonObjectRequest(Request.Method.PUT, url, request,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            getStats();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                });
+                RequestQueue rQueue = Volley.newRequestQueue(getContext());
+                rQueue.add(putRepeticion);
+                rQueue.start();
             }
         }
     }

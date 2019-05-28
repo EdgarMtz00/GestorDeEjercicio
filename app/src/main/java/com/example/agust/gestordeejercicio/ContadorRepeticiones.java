@@ -68,7 +68,7 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
                 if (!start){
                     vibrar.vibrate(500);
                     Intent result = new Intent();
-                    result.putExtra("repeticiones", repeticiones);
+                    result.putExtra("repeticiones", Integer.parseInt(txtRepeticiones.getText().toString()));
                     setResult(Activity.RESULT_OK, result);
                     finish();
                 }
