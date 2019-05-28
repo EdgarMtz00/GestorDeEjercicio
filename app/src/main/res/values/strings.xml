@@ -21,4 +21,12 @@
     <string name="fb_login_protocol_scheme">fb2749026798504952</string>
     <string name="guardar_cambios">Guardar Cambios</string>
     <string name="txt_inicio">Antes de comenzar ingresa tus datos para configurar tus rutinas</string>
+    <string name="brazos">Brazos</string>
+    <string name="elegir_meta">Seleccione que parte del cuerpo es de su interes ejercitar</string>
+    <string name="abdomen">Abdomen</string>
+    <string name="piernas">Piernas</string>
+    <string name="cambiar_meta">Cambiar meta</string>
+    <string name="medir_progreso">Medir Progreso</string>
+    <string name="record_repeticiones">Record de repeticiones:</string>
+    <string name="repeticiones_promedio">Repeticiones promedio:</string>
 </resources>

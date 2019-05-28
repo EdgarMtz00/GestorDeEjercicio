@@ -18,20 +18,20 @@ import android.widget.Toast;
 
 public class ContadorRepeticiones extends Activity implements SensorEventListener {
 
-    private float lastX, lastY, lastZ;
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
-    public Vibrator v;
+    private float lastX, lastY, lastZ; //Ultima medicion del acelerometro obtenida
+    private SensorManager sensorManager; //Clase que otorga acceso a los sensores del dispositivo
+    private Sensor accelerometer; //Clase que maneja los datos del acelerometro
+    public Vibrator v; //Clase para controlar la vibracion del dispositivo
     private float deltaX = 0;
-    private float deltaY = 0;
+    private float deltaY = 0; //Almacenan la diferencia de aceleracion en cada eje
     private float deltaZ = 0;
-    long interval = 670;
-    private float vibrateThreshold = 0;
-    private boolean start;
-    private TextView txtRepeticiones, txtNombre, txtInstruccion;
+    long interval = 670; //Cantidad de milisegundos a esperar entre mediciones del acelerometro
+    private float vibrateThreshold = 1.5f; //Limite para no considerar la medicion como ruido del sensor
+    private boolean start; //Indica si el usuario ha tocado la pantalla para empezar o detener la medicion
+    private TextView txtRepeticiones, txtNombre, txtInstruccion; //Texto con la informacion del ejercicio
     private Intent intent;
-    private boolean flag = false;
-    private Handler handler;
+    private boolean flag = false; //Se activa cuando ha pasado el tiempo suficiente para realizar otra medicion
+    private Handler handler; //Maneja la 
     int repeticiones = 0;
     int MaxRep = 0;
 
@@ -71,8 +71,6 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            //vibrateThreshold = accelerometer.getMaximumRange() / 4;
-            vibrateThreshold = 1.5f;
         } else {
             Toast.makeText(this, "No Sensor", Toast.LENGTH_SHORT).show();
             finish();

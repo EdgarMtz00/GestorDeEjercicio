@@ -132,13 +132,6 @@ public class ConfiguracionFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable s) {
             btnCambio.setVisibility(View.VISIBLE);
-            if(s == etEdad.getEditableText()){
-
-            }else if(s == etEstatura.getEditableText()){
-
-            }else if(s == etPeso.getEditableText()){
-
-            }
         }
     };
 }
