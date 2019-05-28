@@ -68,13 +68,37 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent intent = new Intent(ctx, DatosUsuario.class);
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                String id = accessToken.getUserId();
-                intent.putExtra("id", id);
-                editor.putLong("userId", Long.parseLong(id));
-                editor.apply();
-                startActivity(intent);
+                final String id = accessToken.getUserId();
+                String ip = preferences.getString("ip", "");
+                String url = "http://" + ip + "/serverejercicio/registrar.php?idUsuario=" + id;
+                JsonObjectRequest getRegistro = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getBoolean("register")){
+                                editor.putLong("userId", Long.parseLong(id));
+                                editor.apply();
+                                startActivity(new Intent(ctx, MainActivity.class));
+                                finish();
+                            }else{
+                                Intent intent = new Intent(ctx, DatosUsuario.class);
+                                intent.putExtra("id", Long.parseLong(id));
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+                RequestQueue rQueue = Volley.newRequestQueue(ctx);
+                rQueue.add(getRegistro);
+                rQueue.start();
 
             }
 

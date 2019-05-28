@@ -21,7 +21,7 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
     private float lastX, lastY, lastZ; //Ultima medicion del acelerometro obtenida
     private SensorManager sensorManager; //Clase que otorga acceso a los sensores del dispositivo
     private Sensor accelerometer; //Clase que maneja los datos del acelerometro
-    public Vibrator v; //Clase para controlar la vibracion del dispositivo
+    public Vibrator vibrar; //Clase para controlar la vibracion del dispositivo
     private float deltaX = 0;
     private float deltaY = 0; //Almacenan la diferencia de aceleracion en cada eje
     private float deltaZ = 0;
@@ -48,11 +48,11 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contador_repeticiones);
         intent = getIntent();
-
+        vibrar = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         txtRepeticiones = findViewById(R.id.txtRepeticiones);
         txtInstruccion = findViewById(R.id.txtInstruccion);
         txtNombre = findViewById(R.id.txtNombre);
@@ -65,6 +65,13 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
             @Override
             public void onClick(View v) {
                 start = !start;
+                if (!start){
+                    vibrar.vibrate(500);
+                    Intent result = new Intent();
+                    result.putExtra("repeticiones", repeticiones);
+                    setResult(Activity.RESULT_OK, result);
+                    finish();
+                }
             }
         });
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -75,8 +82,6 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
             Toast.makeText(this, "No Sensor", Toast.LENGTH_SHORT).show();
             finish();
         }
-        //initialize vibration
-        v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     //onResume() register the accelerometer for listening the events
@@ -118,7 +123,10 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
                     txtRepeticiones.setText(String.valueOf(repeticiones/2));
                 }
                 if (repeticiones == MaxRep * 2) {
-                    v.vibrate(500);
+                    vibrar.vibrate(500);
+                    Intent result = new Intent();
+                    result.putExtra("repeticiones", repeticiones);
+                    setResult(Activity.RESULT_OK, result);
                     finish();
                 }
             }

@@ -45,14 +45,17 @@ public class DatosUsuario extends AppCompatActivity {
                     jsonObject.put("edad", txtEdad.getText().toString());
                     jsonObject.put("estatura", txtEstatura.getText().toString());
                     jsonObject.put("peso", txtPeso.getText().toString());
-                    jsonObject.put("id", userid);
+                    jsonObject.put("id", String.valueOf(userid));
+                    jsonObject.put("facebook", true);
 
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     editor.putLong("userId", userid);
+                                    editor.apply();
                                     startActivity(new Intent(ctx, MainActivity.class));
+                                    finish();
                                 }
                             },
                             new Response.ErrorListener() {
