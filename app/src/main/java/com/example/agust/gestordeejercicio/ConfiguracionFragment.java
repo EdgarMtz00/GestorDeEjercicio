@@ -75,7 +75,7 @@ public class ConfiguracionFragment extends Fragment {
             public void onClick(View v) {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("idUsuario",  String.valueOf(preferences.getInt("userId", -1)));
+                    jsonObject.put("idUsuario",  String.valueOf(preferences.getLong("userId", -1)));
                     if(!etEdad.getText().toString().equals("")){
                         jsonObject.put("edad", Integer.parseInt(etEdad.getText().toString()));
                     }
