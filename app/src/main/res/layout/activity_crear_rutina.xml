@@ -10,6 +10,9 @@
         android:id="@+id/txtDia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnSig"
         android:textSize="20sp"
         android:text="hola"/>
 
@@ -17,12 +20,15 @@
         android:id="@+id/lvEjercicios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/txtDia"/>
+        app:layout_constraintTop_toBottomOf="@id/btnSig"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp"/>
     <Button
         android:id="@+id/btnSig"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/lvEjercicios"
+        app:layout_constraintTop_toBottomOf="@+id/txtDia"
+        app:layout_constraintBottom_toTopOf="@id/lvEjercicios"
         android:text="Siguiente Dia"/>
 
 </android.support.constraint.ConstraintLayout>

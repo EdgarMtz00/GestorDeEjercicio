@@ -1,5 +1,6 @@
 package com.example.agust.gestordeejercicio;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -7,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,10 +28,11 @@ import java.util.Set;
 public class Registro extends AppCompatActivity {
     //Campos de informacion del usuario
     EditText etContrasena, etCorreo, etPwd, etEstatura, etPeso, etEdad;
-
     SharedPreferences preferences; //preferencias de la aplicacion
     String url;
-
+    Context ctx = this;
+    Spinner spinNivel;
+    int nivel = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,19 @@ public class Registro extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String ip = preferences.getString("ip", "");
         url = "http://" + ip + "/ServerEjercicio/Registrar.php"; //URL de la API
+        spinNivel = findViewById(R.id.spinNivel);
+
+        spinNivel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                nivel = position + 1;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     /**
@@ -68,6 +85,7 @@ public class Registro extends AppCompatActivity {
                     data.put("edad", Integer.parseInt(edad));
                     data.put("peso", Integer.parseInt(peso));
                     data.put("estatura", Integer.parseInt(estatura));
+                    data.put("nivel", nivel);
 
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
                             new Response.Listener<JSONObject>() {

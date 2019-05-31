@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Dificultad: "/>
             <ImageView
+                android:id="@+id/imgDif"
                 android:layout_width="100dp"
                 android:layout_height="30dp" />
         </LinearLayout>

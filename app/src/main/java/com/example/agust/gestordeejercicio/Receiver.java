@@ -19,8 +19,8 @@ public class Receiver extends BroadcastReceiver {
         PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(android.R.drawable.ic_delete)
-                .setContentTitle("Title")
-                .setContentText("Some text");
+                .setContentTitle("Actualizar Datos")
+                .setContentText("Es momento de que reingrese tu peso y estatura");
         mBuilder.setContentIntent(pi);
         mBuilder.setDefaults(Notification.DEFAULT_SOUND);
         mBuilder.setAutoCancel(true);

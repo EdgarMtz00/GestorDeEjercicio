@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -94,18 +95,46 @@ public class ListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater vLink = LayoutInflater.from(context);
         if(type) {
+            Rutina r = rutinas.get(position);
             View v = vLink.inflate(R.layout.rutina, null);
             TextView textView = v.findViewById(R.id.txtDia);
-            textView.setText(rutinas.get(position).getDia());
+            textView.setText(r.getDia());
+            textView = v.findViewById(R.id.txtNombre);
+            textView.setText(r.getEjercicio().getNombre());
             textView = v.findViewById((R.id.txtRepeticiones));
-            textView.setText(rutinas.get(position).getRepeticiones());
+            textView.setText(r.getRepeticiones());
+            ImageView imgDif = v.findViewById(R.id.imgDif);
+            switch (r.getEjercicio().getDificultad()){
+                case 1:
+                    imgDif.setImageResource(R.drawable.unaestrella);
+                    break;
+                case 2:
+                    imgDif.setImageResource(R.drawable.dosestrella);
+                    break;
+                case 3:
+                    imgDif.setImageResource(R.drawable.tresestrella);
+                    break;
+            }
             return v;
         }else{
             final View v = vLink.inflate(R.layout.ejercicio, null);
+            Ejercicio e = ejercicios.get(position);
             TextView textView = v.findViewById(R.id.txtNombre);
-            textView.setText(ejercicios.get(position).getNombre());
+            textView.setText(e.getNombre());
             textView = v.findViewById((R.id.txtInstruccion));
-            textView.setText(ejercicios.get(position).getInstruccion());
+            textView.setText(e.getInstruccion());
+            ImageView imgDif = v.findViewById(R.id.imgDif);
+            switch (e.getDificultad()){
+                case 1:
+                    imgDif.setImageResource(R.drawable.unaestrella);
+                    break;
+                case 2:
+                    imgDif.setImageResource(R.drawable.dosestrella);
+                    break;
+                case 3:
+                    imgDif.setImageResource(R.drawable.tresestrella);
+                    break;
+            }
             final TextView txtRepeticiones = v.findViewById(R.id.txtRepeticiones);
             SeekBar sbRepeticiones = v.findViewById(R.id.sbRepeticiones);
             sbRepeticiones.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

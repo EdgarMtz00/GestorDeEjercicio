@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class Metas extends Fragment {
     ConstraintLayout cambiarMeta, progresoMeta;
     SharedPreferences preferences;
     TextView txtProm, txtRecord, txtUltimas, txtMeta;
+    EditText txtObjetivo;
 
     View.OnClickListener elegirMeta = new View.OnClickListener() {
         @Override
@@ -42,10 +44,11 @@ public class Metas extends Fragment {
             String meta = ((Button)v).getText().toString();
             try {
                 Long id = preferences.getLong("userId", -1);
-                String ip = preferences.getString("ip", "");
+                String ip = preferences.getString("ip", "chupame las bolas");
                 String url = "http://" + ip + "/serverejercicio/metas.php";
                 JSONObject data = new JSONObject();
                 data.put("meta", meta);
+                data.put("repeticiones", txtObjetivo.getText().toString());
                 data.put("idUsuario",  String.valueOf(id));
                 JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
                     @Override
@@ -121,6 +124,7 @@ public class Metas extends Fragment {
         txtRecord = v.findViewById(R.id.txtRecord);
         txtUltimas = v.findViewById(R.id.txtUltimas);
         txtMeta = v.findViewById(R.id.txtMeta);
+        txtObjetivo = v.findViewById(R.id.txtObjetivo);
 
         getStats();
 
@@ -158,6 +162,8 @@ public class Metas extends Fragment {
             public void onResponse(JSONObject response) {
                 try {
                     if (response.getString("meta") != null) {
+                        cambiarMeta.setVisibility(View.GONE);
+                        progresoMeta.setVisibility(View.VISIBLE);
                         txtMeta.setText(response.getString("meta"));
                         txtProm.setText(response.getString("promedio"));
                         txtRecord.setText(response.getString("record"));

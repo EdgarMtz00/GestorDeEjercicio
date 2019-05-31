@@ -29,4 +29,18 @@
     <string name="medir_progreso">Medir Progreso</string>
     <string name="record_repeticiones">Record de repeticiones:</string>
     <string name="repeticiones_promedio">Repeticiones promedio:</string>
+    <string name="correr">Correr:</string>
+    <string name="repeticiones_alcanzar">No. repeticiones a alcanzar</string>
+    <string name="imc">IMC:</string>
+
+    <string-array name="niveles">
+        <item>Principiante</item>
+        <item>Intermedio</item>
+        <item>Avanzado</item>
+    </string-array>
+    <string-array name="intervalos">
+        <item>Cada dia</item>
+        <item>Cada semana</item>
+        <item>Cada mes</item>
+    </string-array>
 </resources>

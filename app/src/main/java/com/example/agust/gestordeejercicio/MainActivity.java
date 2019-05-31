@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,15 +28,13 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("ip", "192.168.137.87");
+        editor.putString("ip", "192.168.1.76");
         editor.apply();
         if (preferences.getLong("userId", -1) == -1){
             Intent Sesion = new Intent(this, InicioSesion.class);
             startActivity(Sesion);
             finish();
         }
-        String userid = String.valueOf(preferences.getLong("userId", -1));
-        Toast.makeText(this, userid , Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(MainActivity.this, Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
@@ -47,9 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void notificaciones(boolean active){
         if(active) {
-            am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY / (24 * 60), pendingIntent);
+            am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }else{
             am.cancel(pendingIntent);
         }
+    }
+
+    public  void setInterval(long interval){
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
     }
 }

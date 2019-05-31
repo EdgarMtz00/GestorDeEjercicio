@@ -16,7 +16,7 @@
         android:hint="Edad"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPwd" />
+        app:layout_constraintTop_toBottomOf="@+id/spinNivel" />
 
     <EditText
         android:id="@+id/etContrasena"
@@ -60,6 +60,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
+    <Spinner
+        android:id="@+id/spinNivel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/niveles"
+        app:layout_constraintTop_toBottomOf="@id/etPwd"
+        app:layout_constraintBottom_toTopOf="@id/etPeso"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
@@ -69,7 +80,6 @@
         android:layout_marginEnd="100dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="terminos"
         android:text="Términos y Condiciones"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +91,6 @@
         android:layout_height="37dp"
         android:onClick="help"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edad"
         app:srcCompat="@android:drawable/ic_menu_help" />
 
     <Button
@@ -120,7 +129,7 @@
         android:hint="Peso"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPwd" />
+        app:layout_constraintTop_toBottomOf="@+id/spinNivel" />
 
     <EditText
         android:id="@+id/etEstatura"
@@ -132,8 +141,8 @@
         android:ems="10"
         android:hint="Estatura"
         android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/edad"
+        app:layout_constraintEnd_toStartOf="@+id/etEdad"
         app:layout_constraintStart_toEndOf="@+id/etPeso"
-        app:layout_constraintTop_toBottomOf="@+id/etPwd" />
+        app:layout_constraintTop_toBottomOf="@+id/spinNivel" />
 
 </android.support.constraint.ConstraintLayout>

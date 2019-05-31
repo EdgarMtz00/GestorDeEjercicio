@@ -1,8 +1,10 @@
 package com.example.agust.gestordeejercicio;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,8 +14,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -29,9 +36,12 @@ import org.json.JSONObject;
 
 public class ConfiguracionFragment extends Fragment {
     EditText etPeso, etEdad, etEstatura;
+    TextView txtImc;
     Button btnCambio, btnCerrar;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+    Spinner spinIntervalo;
+    Switch swNotificacion;
     @Override
     public View onCreateView(LayoutInflater inflater,
                  ViewGroup container, Bundle savedInstanceState) {
@@ -39,9 +49,41 @@ public class ConfiguracionFragment extends Fragment {
         etPeso = v.findViewById(R.id.peso);             //campo para ingresar peso
         etEdad = v.findViewById(R.id.edad);             //campo para ingresar edad
         etEstatura = v.findViewById(R.id.estatura);     //campo para ingresar estatura
+        txtImc = v.findViewById(R.id.txtImc);
         etPeso.addTextChangedListener(textWatcher);     //
         etEstatura.addTextChangedListener(textWatcher); //Vincular campos de texto con TextWatcher
         etEdad.addTextChangedListener(textWatcher);     //
+        spinIntervalo = v.findViewById(R.id.spinIntervalo);
+        swNotificacion = v.findViewById(R.id.notificaciones);
+
+        swNotificacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ((MainActivity)getActivity()).notificaciones(isChecked);
+            }
+        });
+
+        spinIntervalo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY);
+                        break;
+                    case 1:
+                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY * 7);
+                        break;
+                    case 2:
+                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY * 30);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         preferences = PreferenceManager.getDefaultSharedPreferences
                 (this.getActivity().getApplicationContext());       //Preferencias de la aplicacion
@@ -49,6 +91,34 @@ public class ConfiguracionFragment extends Fragment {
 
         btnCerrar = v.findViewById(R.id.btnCerrarSesion); //Boton para cerrar sesion
         btnCambio = v.findViewById(R.id.btnCambio);       //Boton para guardar cambios
+
+        String ip = preferences.getString("ip", "");
+        String url = "http://" + ip + "/ServerEjercicio/imc.php?idUsuario=" + preferences.getLong("userId", -1); //URL de la API
+
+        final JsonObjectRequest imcRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            double imc = response.getDouble("imc");
+                            String estado = response.getString("estado");
+                            txtImc.setTextColor(Color.RED);
+                            if (estado.equals("bueno") )
+                                txtImc.setTextColor(Color.GREEN);
+                            txtImc.setText("Imc: " + imc + " " + estado);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+        });
+        RequestQueue rQueue = Volley.newRequestQueue(getContext());
+        rQueue.add(imcRequest);
+        rQueue.start();
 
         /*
           Evento accionado cuando se presiona btnCerrar
@@ -109,6 +179,7 @@ public class ConfiguracionFragment extends Fragment {
                         });
                 RequestQueue rQueue = Volley.newRequestQueue(getContext());
                 rQueue.add(jsonObjectRequest);
+                rQueue.add(imcRequest);
                 rQueue.start();
             }
         });
