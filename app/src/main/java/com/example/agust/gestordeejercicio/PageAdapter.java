@@ -38,9 +38,9 @@ public class PageAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
             case 0: return "Rutinas";
-            case 1: return "Cronometro";
+            case 1: return "Correr";
             case 2: return "Metas";
-            case 3: return "configuracion";
+            case 3: return "Usuario";
             default: return  "tienes un error en el pager";
         }
     }

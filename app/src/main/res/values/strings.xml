@@ -22,7 +22,7 @@
     <string name="guardar_cambios">Guardar Cambios</string>
     <string name="txt_inicio">Antes de comenzar ingresa tus datos para configurar tus rutinas</string>
     <string name="brazos">Brazos</string>
-    <string name="elegir_meta">Seleccione que parte del cuerpo es de su interes ejercitar</string>
+    <string name="elegir_meta">Seleccione que parte del cuerpo es de su interés ejercitar.\nNota: Cambiar de meta eliminará el progreso de la anterior</string>
     <string name="abdomen">Abdomen</string>
     <string name="piernas">Piernas</string>
     <string name="cambiar_meta">Cambiar meta</string>

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("ip", "192.168.137.87");
+        editor.putString("ip", "192.168.0.7");
         editor.apply();
         if (preferences.getLong("userId", -1) == -1){
             Intent Sesion = new Intent(this, InicioSesion.class);

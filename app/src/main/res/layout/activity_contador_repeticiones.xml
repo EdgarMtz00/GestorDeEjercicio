@@ -17,7 +17,8 @@
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:text="Ejercicios"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_margin="20dp"/>
 
     <TextView
         android:id="@id/txtInstruccion"
@@ -26,7 +27,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:text="Instruccion"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:layout_margin="20dp"/>
 
     <TextView
         android:id="@+id/txtRepeticiones"
@@ -35,6 +37,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:text="0.0"
-        android:textSize="35sp" />
+        android:textSize="35sp"
+        android:layout_margin="20dp"/>
 
 </LinearLayout>
