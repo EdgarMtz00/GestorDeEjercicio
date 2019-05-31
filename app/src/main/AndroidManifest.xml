@@ -50,7 +50,8 @@
         <receiver android:name=".Receiver" />
 
         <activity android:name=".ContadorRepeticiones" />
-        <activity android:name=".DatosUsuario"></activity>
+        <activity android:name=".DatosUsuario" />
+        <activity android:name=".EscogerNivel"></activity>
     </application>
 
 </manifest>

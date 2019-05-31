@@ -29,4 +29,10 @@
     <string name="medir_progreso">Medir Progreso</string>
     <string name="record_repeticiones">Record de repeticiones:</string>
     <string name="repeticiones_promedio">Repeticiones promedio:</string>
+    <string name="lvl_basico">Nivel básico</string>
+    <string name="lvl_medio">Nivel medio</string>
+    <string name="lvl_avanzado">Nivel avanzado</string>
+    <string name="desc_basico"></string>
+    <string name="desc_medio"></string>
+    <string name="desc_avanzado"></string>
 </resources>
