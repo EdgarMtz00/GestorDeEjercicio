@@ -10,6 +10,7 @@ public class Ejercicio {
     private int id;
     private String nombre;
     private String instruccion;
+    private String zona;
     private  int dificultad;
     private int repeticiones;
 
@@ -25,17 +26,26 @@ public class Ejercicio {
         id = -1;
     }
 
-    public Ejercicio(int id, String nombre, String instruccion, int dificultad) {
+
+
+    public Ejercicio(int id, String nombre, String instruccion, int dificultad, String zona) {
         this.id = id;
         this.nombre = nombre;
         this.instruccion = instruccion;
         this.dificultad = dificultad;
+        this.zona = zona;
     }
 
     /**
      * Funciones para obtener y establecer los datos del ejercicio
      */
+    public String getZona() {
+        return zona;
+    }
 
+    public void setZona(String zona) {
+        this.zona = zona;
+    }
     public int getId() {
         return id;
     }
@@ -74,6 +84,7 @@ public class Ejercicio {
         ejercicio.setInstruccion(j.getString("Instrucciones"));
         ejercicio.setId(j.getInt("ID"));
         ejercicio.setDificultad(j.getInt("Dificultad"));
+        ejercicio.setZona(j.getString("Zona"));
         return ejercicio;
     }
 

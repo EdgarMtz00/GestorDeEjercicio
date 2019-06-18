@@ -66,7 +66,8 @@ public class Rutina {
     public static Rutina rutinaParse(JSONObject j) throws JSONException {
         Rutina rutina = new Rutina();
         rutina.setEjercicio(new Ejercicio(0, j.getString("Nombre"),
-                j.getString("Instrucciones"), j.getInt("Dificultad")));
+                j.getString("Instrucciones"), j.getInt("Dificultad"),
+                j.getString("Zona")));
         rutina.setDia(j.getString("Dia"));
         rutina.setRepeticiones(j.getString("Repeticiones"));
         return rutina;

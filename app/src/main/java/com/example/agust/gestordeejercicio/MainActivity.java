@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("ip", "192.168.1.76");
         editor.apply();
-        if (preferences.getLong("userId", -1) == -1){
+        if ((int)(preferences.getLong("userId", -1)) == -1){
             Intent Sesion = new Intent(this, InicioSesion.class);
             startActivity(Sesion);
             finish();

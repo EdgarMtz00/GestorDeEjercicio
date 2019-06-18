@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class CrearRutina extends AppCompatActivity {
     static String[] dias = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
     Button btnSig;
     JSONArray ejercicios;
+    Spinner spinZonas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +45,34 @@ public class CrearRutina extends AppCompatActivity {
         txtDia = findViewById(R.id.txtDia);
         txtDia.setText(dias[numDia]);
         btnSig = findViewById(R.id.btnSig);
+        spinZonas = findViewById(R.id.spinZonas);
         listAdapter = new ListAdapter(this);
         final Context ctx = this;
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         final String ip = preferences.getString("ip", "");
         String url ="http://" + ip + "/serverejercicio/ejercicios.php";
+
+        spinZonas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                case 0:
+                    listAdapter.zonaActiva = "Brazos";
+                    break;
+                case 1:
+                    listAdapter.zonaActiva = "Abdomen";
+                    break;
+                case 2:
+                    listAdapter.zonaActiva = "Piernas";
+                    break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, new JSONArray(),
                 new Response.Listener<JSONArray>() {

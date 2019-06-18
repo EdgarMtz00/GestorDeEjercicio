@@ -22,7 +22,7 @@
     <string name="guardar_cambios">Guardar Cambios</string>
     <string name="txt_inicio">Antes de comenzar ingresa tus datos para configurar tus rutinas</string>
     <string name="brazos">Brazos</string>
-    <string name="elegir_meta">Seleccione que parte del cuerpo es de su interes ejercitar</string>
+    <string name="elegir_meta">Seleccione sobre que ejercicio quiere basar su meta para supervisar su progreso y un numero de repeticiones que le gustaria llegar a hacer en dicho ejercicio</string>
     <string name="abdomen">Abdomen</string>
     <string name="piernas">Piernas</string>
     <string name="cambiar_meta">Cambiar meta</string>
@@ -32,13 +32,26 @@
     <string name="correr">Correr:</string>
     <string name="repeticiones_alcanzar">No. repeticiones a alcanzar</string>
     <string name="imc">IMC:</string>
+    <string name="aclaracion">Estos ejercicios no forman pare de tu rutina pero realizarlos te servira para mantener una estadistica sobre tus avances al ejercitar</string>
+    <string name="contador_help">Presione la pantalla para comenzar y presione de nuevo cuando termine</string>
+    <string name="siguiente_dia">Siguiente Dia</string>
 
     <string-array name="niveles">
         <item>Principiante</item>
         <item>Intermedio</item>
         <item>Avanzado</item>
     </string-array>
+    <string-array name="zonas">
+        <item>Brazos</item>
+        <item>Abdomen</item>
+        <item>Pierna</item>
+    </string-array>
     <string-array name="intervalos">
+        <item>Cada dia</item>
+        <item>Cada semana</item>
+        <item>Cada mes</item>
+    </string-array>
+    <string-array name="Dias">
         <item>Cada dia</item>
         <item>Cada semana</item>
         <item>Cada mes</item>

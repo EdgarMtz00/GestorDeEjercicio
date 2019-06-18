@@ -22,6 +22,7 @@ public class ListAdapter extends BaseAdapter {
     private ArrayList<Rutina> rutinas;          //Lista de una rutina
     private ArrayList<Ejercicio> ejercicios;    //Lista de ejercicios
     private boolean type;                       //Define que lista se usara
+    public String zonaActiva;
 
     public ListAdapter(Context context) {
         this.context = context;
@@ -119,6 +120,11 @@ public class ListAdapter extends BaseAdapter {
         }else{
             final View v = vLink.inflate(R.layout.ejercicio, null);
             Ejercicio e = ejercicios.get(position);
+            if(!e.getZona().equals(zonaActiva)) {
+                v.setVisibility(View.GONE);
+            }else{
+                v.setVisibility(View.VISIBLE);
+            }
             TextView textView = v.findViewById(R.id.txtNombre);
             textView.setText(e.getNombre());
             textView = v.findViewById((R.id.txtInstruccion));
