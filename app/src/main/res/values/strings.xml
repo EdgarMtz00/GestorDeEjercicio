@@ -59,4 +59,12 @@
         <item>Jueves</item>
         <item>Viernes</item>
     </string-array>
+    <string-array name="informacion_niveles">
+        <item>El nivel para principiante está diseñado para cualquier persona que desee comenzar a realizar ejercicior. Se te
+                asignará una rutina de acondicionamiento.</item>
+        <item> El nivel medio está diseñado para personas que llevan haciendo ejercicio entre 6 y 12 meses.\nPodrás agregar tu
+                rutina en caso de que cuentes con una, de no ser así, se te asignará una rutina.</item>
+        <item>El nivel avanzado está diseñado para personas que ya tengan experiencia haciendo ejercicio, por lo que podrás
+                ingresar tu propia rutina o elegir entre una rutina avanzada o una para tonificar músculos.</item>
+    </string-array>
 </resources>

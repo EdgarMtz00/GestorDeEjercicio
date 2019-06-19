@@ -114,7 +114,8 @@ public class Registro extends AppCompatActivity {
 
 
     public void help(View v){
-
+        Intent Info = new Intent(this, Informacion.class);
+        startActivity(Info);
     }
 
 
