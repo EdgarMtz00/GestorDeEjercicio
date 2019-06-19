@@ -125,7 +125,7 @@ public class Registro extends AppCompatActivity {
         try {
             Toast.makeText(this, "Registrado" + data.getString("msg"), Toast.LENGTH_SHORT).show();
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putLong("userId", data.getInt("id"));
+            editor.putLong("userId", (long) data.getInt("id"));
             editor.apply();
             startActivity(new Intent(this, MainActivity.class));
             finish();

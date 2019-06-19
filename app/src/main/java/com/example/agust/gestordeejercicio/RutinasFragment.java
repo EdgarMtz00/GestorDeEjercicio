@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,6 +30,7 @@ public class RutinasFragment extends Fragment {
     ListAdapter listAdapter;    //Adapta la informacion para ser mostrada en la lista
     Button btnCrear;
     Intent crearRutina;
+    Spinner spinDias;
 
     /**
      * Al iniciar el fragment, pide a la API la rutina del usuario,
@@ -42,12 +44,27 @@ public class RutinasFragment extends Fragment {
         listView = v.findViewById(R.id.listView);
         listAdapter = new ListAdapter(getContext());
         btnCrear = v.findViewById(R.id.btnCrear);
+        spinDias = v.findViewById(R.id.spinDias);
+
+        spinDias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                listAdapter.diaActivo = spinDias.getSelectedItem().toString();
+                listView.setAdapter(listAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         crearRutina = new Intent(this.getActivity(), CrearRutina.class);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         String ip = preferences.getString("ip", "");
         String url = "http://" + ip + "/serverejercicio/rutinas.php?idUsuario=" + preferences.getLong("userId", -1);
-        JSONArray jsonArray = new JSONArray();
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, jsonArray,
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
@@ -60,15 +77,18 @@ public class RutinasFragment extends Fragment {
 
                     }
         });
+
         RequestQueue rQueue = Volley.newRequestQueue(getContext());
         rQueue.add(arrayRequest);
         rQueue.start();
-        btnCrear.setOnClickListener(new View.OnClickListener() {
+
+         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(crearRutina);
             }
         });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

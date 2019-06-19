@@ -55,17 +55,8 @@ public class CrearRutina extends AppCompatActivity {
         spinZonas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                case 0:
-                    listAdapter.zonaActiva = "Brazos";
-                    break;
-                case 1:
-                    listAdapter.zonaActiva = "Abdomen";
-                    break;
-                case 2:
-                    listAdapter.zonaActiva = "Piernas";
-                    break;
-                }
+                listAdapter.zonaActiva = spinZonas.getSelectedItem().toString();
+                lvEjercicios.setAdapter(listAdapter);
             }
 
             @Override

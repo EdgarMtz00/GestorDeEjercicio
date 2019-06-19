@@ -22,7 +22,8 @@ public class ListAdapter extends BaseAdapter {
     private ArrayList<Rutina> rutinas;          //Lista de una rutina
     private ArrayList<Ejercicio> ejercicios;    //Lista de ejercicios
     private boolean type;                       //Define que lista se usara
-    public String zonaActiva;
+    public String zonaActiva = "Brazos";
+    public String diaActivo = "Lunes";
 
     public ListAdapter(Context context) {
         this.context = context;
@@ -98,6 +99,7 @@ public class ListAdapter extends BaseAdapter {
         if(type) {
             Rutina r = rutinas.get(position);
             View v = vLink.inflate(R.layout.rutina, null);
+
             TextView textView = v.findViewById(R.id.txtDia);
             textView.setText(r.getDia());
             textView = v.findViewById(R.id.txtNombre);
@@ -116,15 +118,28 @@ public class ListAdapter extends BaseAdapter {
                     imgDif.setImageResource(R.drawable.tresestrella);
                     break;
             }
+            if(r.getDia().equals(diaActivo)){
+                textView = v.findViewById(R.id.txtDia);
+                textView.setVisibility(View.VISIBLE);
+                textView = v.findViewById(R.id.txtNombre);
+                textView.setVisibility(View.VISIBLE);
+                textView = v.findViewById((R.id.txtRepeticiones));
+                textView.setVisibility(View.VISIBLE);
+                imgDif.setVisibility(View.VISIBLE);
+            }else{
+                textView = v.findViewById(R.id.txtDia);
+                textView.setVisibility(View.GONE);
+                textView = v.findViewById(R.id.txtNombre);
+                textView.setVisibility(View.GONE);
+                textView = v.findViewById((R.id.txtRepeticiones));
+                textView.setVisibility(View.GONE);
+                imgDif.setVisibility(View.GONE);
+            }
             return v;
         }else{
             final View v = vLink.inflate(R.layout.ejercicio, null);
             Ejercicio e = ejercicios.get(position);
-            if(!e.getZona().equals(zonaActiva)) {
-                v.setVisibility(View.GONE);
-            }else{
-                v.setVisibility(View.VISIBLE);
-            }
+
             TextView textView = v.findViewById(R.id.txtNombre);
             textView.setText(e.getNombre());
             textView = v.findViewById((R.id.txtInstruccion));
@@ -164,7 +179,31 @@ public class ListAdapter extends BaseAdapter {
 
                 }
             });
+
+            if(!e.getZona().equals(zonaActiva)) {
+                textView = v.findViewById(R.id.txtDificultad);
+                textView.setVisibility(View.GONE);
+                textView = v.findViewById(R.id.txtNombre);
+                textView.setVisibility(View.GONE);
+                textView = v.findViewById((R.id.txtInstruccion));
+                textView.setVisibility(View.GONE);
+                imgDif.setVisibility(View.GONE);
+                txtRepeticiones.setVisibility(View.GONE);
+                 sbRepeticiones.setVisibility(View.GONE);
+            }else{
+                textView = v.findViewById(R.id.txtDificultad);
+                textView.setVisibility(View.VISIBLE);
+                textView = v.findViewById(R.id.txtNombre);
+                textView.setVisibility(View.VISIBLE);
+                textView = v.findViewById((R.id.txtInstruccion));
+                textView.setVisibility(View.VISIBLE);
+                imgDif.setVisibility(View.VISIBLE);
+                txtRepeticiones.setVisibility(View.VISIBLE);
+                sbRepeticiones.setVisibility(View.VISIBLE);
+            }
+
             return v;
+
         }
     }
 }

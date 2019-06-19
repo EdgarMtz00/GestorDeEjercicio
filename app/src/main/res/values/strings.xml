@@ -35,6 +35,7 @@
     <string name="aclaracion">Estos ejercicios no forman pare de tu rutina pero realizarlos te servira para mantener una estadistica sobre tus avances al ejercitar</string>
     <string name="contador_help">Presione la pantalla para comenzar y presione de nuevo cuando termine</string>
     <string name="siguiente_dia">Siguiente Dia</string>
+    <string name="dificultad">Dificultad:</string>
 
     <string-array name="niveles">
         <item>Principiante</item>
@@ -52,8 +53,10 @@
         <item>Cada mes</item>
     </string-array>
     <string-array name="Dias">
-        <item>Cada dia</item>
-        <item>Cada semana</item>
-        <item>Cada mes</item>
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miercoles</item>
+        <item>Jueves</item>
+        <item>Viernes</item>
     </string-array>
 </resources>

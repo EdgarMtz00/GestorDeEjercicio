@@ -16,6 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/crear_rutina"/>
+
+        <Spinner
+            android:id="@+id/spinDias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/Dias"/>
         <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
