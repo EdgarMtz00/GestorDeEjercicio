@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -51,15 +55,20 @@ import java.sql.Time;
  * progreso: Segundos transcurridos desde que se inicio el cronómetro.
  * progresoTemp: Almacena el tiempo transcurrido desde que se inició el cronómetro hasta que se presionó btnPausa.
  */
-public class Cronometro extends Fragment {
+public class Cronometro extends Fragment implements SensorEventListener {
     boolean clickInicio, clickPausa;
-    TextView txtDistancia;
     ProgressBar prgReloj;
     boolean correr;
     Switch swCorrer;
     int progreso = 0;
     long progresoTemp=0;
     Button btnInicio, btnPausa;
+    SensorManager sManager;
+    Sensor stepSensor;
+    TextView txtDistancia, txtPasos, txtTiempo;
+    private long steps = 0;
+    private float distance;
+    View v;
 
     /**
      * timerProgress: Objeto para realizar conteo de 60 segundos realizando una accion cada segundo
@@ -84,25 +93,31 @@ public class Cronometro extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_cronometro, container, false);
+        v = inflater.inflate(R.layout.fragment_cronometro, container, false);
         swCorrer = v.findViewById(R.id.swCorrer);
 
         txtDistancia = v.findViewById(R.id.txtDistancia);
+        txtPasos = v.findViewById(R.id.txtPasos);
+        txtTiempo = v.findViewById(R.id.txtTiempo);
         btnInicio = v.findViewById(R.id.btnInicio);
         btnPausa = v.findViewById(R.id.btnPausa);
         final Chronometer crono = v.findViewById(R.id.crono);
         prgReloj = v.findViewById(R.id.prgReloj);
-        clickInicio = true;
-        clickPausa = true;
         prgReloj.setMax(60); //Establece 60 como el valor maximo de prgReloj
-
-        Intent intent = new Intent(getContext(), DistanceTraveledService.class);
-        getActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        sManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
         swCorrer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 correr = isChecked;
+                if (correr) {
+                    txtDistancia.setVisibility(View.VISIBLE);
+                    txtPasos.setVisibility(View.VISIBLE);
+                }else {
+                    txtDistancia.setVisibility(View.GONE);
+                    txtDistancia.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -114,25 +129,28 @@ public class Cronometro extends Fragment {
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clickInicio = !clickInicio;
                 if(clickInicio){
+                    txtTiempo.setVisibility(View.GONE);
                     crono.setBase(SystemClock.elapsedRealtime());
                     crono.start();
                     timerProgress.start();
                     btnInicio.setText("DETENER");
                     progreso--;
+                    btnPausa.setVisibility(View.VISIBLE);
                 }else{
                     crono.stop();
-
-                    displayDistance();
                     timerProgress.cancel();
                     guardarTiempo(progreso);
                     progreso = 0;
                     progresoTemp = 0;
                     prgReloj.setProgress(progreso);
                     crono.setBase(SystemClock.elapsedRealtime());
+                    steps = 0;
+                    distance = 0;
                     btnInicio.setText("INICIAR");
+                    btnPausa.setVisibility(View.GONE);
                 }
-                clickInicio = !clickInicio;
             }
         });
 
@@ -146,6 +164,7 @@ public class Cronometro extends Fragment {
             public void onClick(View v) {
                 if(!clickInicio)
                 {
+                    clickPausa = !clickPausa;
                     if(clickPausa){
                         progresoTemp = crono.getBase() - SystemClock.elapsedRealtime();
                         crono.stop();
@@ -158,14 +177,13 @@ public class Cronometro extends Fragment {
                         btnPausa.setText("PAUSAR");
                         progreso--;
                     }
-                    clickPausa = !clickPausa;
                 }
             }
         });
         return v;
     }
 
-    private void guardarTiempo(int tiempo){
+    private void guardarTiempo(final int tiempo){
         JSONObject request = new JSONObject();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext()); //preferencias de la aplicacion
         Long id = preferences.getLong("userId", -1);
@@ -180,6 +198,16 @@ public class Cronometro extends Fragment {
             JsonObjectRequest setTiempo = new JsonObjectRequest(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    if(response.has("tiempo")){
+                        try {
+                            txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
+                                    + response.getInt("tiempo") + "\n" +response.getInt("porcentaje")
+                                    + "% en comparacion al recorrido anterior");
+                            txtTiempo.setVisibility(View.VISIBLE);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                 }
             }, new Response.ErrorListener() {
@@ -197,36 +225,33 @@ public class Cronometro extends Fragment {
 
     }
 
-    DistanceTraveledService mDistanceTraveledService;
-    boolean bound = false;
-
-    ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            DistanceTraveledService.DistanceTravelBinder distanceTravelBinder = (DistanceTraveledService.DistanceTravelBinder)service;
-            mDistanceTraveledService = distanceTravelBinder.getBinder();
-            bound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound = false;
-        }
-    };
-
-    private void displayDistance() {
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                double distance = 0;
-                if(mDistanceTraveledService != null){
-                    distance = mDistanceTraveledService.getDistanceTraveled();
-                }
-                txtDistancia.setText(String.valueOf(distance));
-                handler.postDelayed(this, 1000);
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        sManager.unregisterListener(this, stepSensor);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Sensor sensor = event.sensor;
+        if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR && clickInicio && correr) {
+            steps++;
+            distance = (float)(steps*78)/(float)100;
+            txtPasos.setText("Pasos:" + steps);
+            txtDistancia.setText("Distancia: " + distance + "m");
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
 
 }

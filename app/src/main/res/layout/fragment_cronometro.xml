@@ -35,10 +35,10 @@
             android:layout_height="150dp"
             android:progress="10"
             android:progressDrawable="@drawable/circulo"
-            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/txtDistancia"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btnInicio" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Chronometer
             android:id="@+id/crono"
@@ -54,10 +54,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/distancia"
+            app:layout_constraintBottom_toTopOf="@+id/txtPasos"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/prgReloj" />
+
+        <TextView
+            android:id="@+id/txtPasos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pasos"
+            app:layout_constraintBottom_toTopOf="@+id/txtTiempo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/txtDistancia" />
+        <TextView
+            android:id="@+id/txtTiempo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/btnInicio"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/prgReloj" />
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/txtPasos" />
 
         <Button
             android:id="@+id/btnInicio"
@@ -67,7 +88,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/prgReloj" />
+            app:layout_constraintTop_toBottomOf="@+id/txtTiempo" />
 
         <Button
             android:id="@+id/btnPausa"

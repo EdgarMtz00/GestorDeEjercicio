@@ -51,6 +51,14 @@ public class CrearRutina extends AppCompatActivity {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         final String ip = preferences.getString("ip", "");
         String url ="http://" + ip + "/serverejercicio/ejercicios.php";
+        Button btnCrear = findViewById(R.id.btnCrear);
+
+        btnCrear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ctx, CrearEjercicio.class));
+            }
+        });
 
         spinZonas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

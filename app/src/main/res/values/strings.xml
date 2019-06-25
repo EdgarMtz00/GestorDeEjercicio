@@ -36,6 +36,15 @@
     <string name="contador_help">Presione la pantalla para comenzar y presione de nuevo cuando termine</string>
     <string name="siguiente_dia">Siguiente Dia</string>
     <string name="dificultad">Dificultad:</string>
+    <string name="pasos">Pasos:</string>
+    <string name="anadir_ejercicios">Añadir ejercicios</string>
+    <string name="nombre_ejercicio">Nombre del ejercicio</string>
+    <string name="dia_ejercicio">Dia en que realiza el ejercicio</string>
+    <string name="repeticiones_realizar">Repeticiones que realizara</string>
+    <string name="crear_ejercicio">Crear Ejercicio</string>
+    <string name="ingresar_rep">Ingrese las repeticiones que haya realizdo en este ejercicio</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="ejercicios">Ejercicios</string>
 
     <string-array name="niveles">
         <item>Principiante</item>

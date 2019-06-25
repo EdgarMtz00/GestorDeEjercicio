@@ -69,7 +69,7 @@ public class Registro extends AppCompatActivity {
      * @param v
      */
     public void onClickRegistro(View v){
-        String correo, pwd,estatura, edad, peso;
+        String correo, pwd, estatura, edad, peso;
         if(etContrasena.getText().toString().equals(etPwd.getText().toString())) {
             correo = etCorreo.getText().toString();
             pwd = etContrasena.getText().toString();
@@ -126,6 +126,7 @@ public class Registro extends AppCompatActivity {
             Toast.makeText(this, "Registrado" + data.getString("msg"), Toast.LENGTH_SHORT).show();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putLong("userId", (long) data.getInt("id"));
+            editor.putInt("nivel", data.getInt("nivel"));
             editor.apply();
             startActivity(new Intent(this, MainActivity.class));
             finish();

@@ -78,6 +78,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         try {
                             if (response.getBoolean("register")){
                                 editor.putLong("userId", Long.parseLong(id));
+                                editor.putInt("nivel", response.getInt("Nivel"));
                                 editor.apply();
                                 startActivity(new Intent(ctx, MainActivity.class));
                                 finish();
@@ -158,6 +159,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         try {
             if(jsonObject.getBoolean("logIn")){
                 editor.putLong("userId", jsonObject.getInt("id"));
+                editor.putInt("nivel", jsonObject.getInt("nivel"));
                 editor.apply();
                 startActivity(new Intent(this, MainActivity.class));
                 finish();

@@ -37,6 +37,7 @@ public class Metas extends Fragment {
     SharedPreferences preferences;
     TextView txtProm, txtRecord, txtUltimas, txtMeta;
     EditText txtObjetivo;
+    Context ctx = getContext();
 
     View.OnClickListener elegirMeta = new View.OnClickListener() {
         @Override
@@ -44,28 +45,35 @@ public class Metas extends Fragment {
             String meta = ((Button)v).getText().toString();
             try {
                 Long id = preferences.getLong("userId", -1);
-                String ip = preferences.getString("ip", "chupame las bolas");
-                String url = "http://" + ip + "/serverejercicio/metas.php";
-                JSONObject data = new JSONObject();
-                data.put("meta", meta);
-                data.put("repeticiones", txtObjetivo.getText().toString());
-                data.put("idUsuario",  String.valueOf(id));
-                JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        cambiarMeta.setVisibility(View.GONE);
-                        progresoMeta.setVisibility(View.VISIBLE);
-                        getStats();
-                    }},
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getContext(), "No se pudo cambiar la meta", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                RequestQueue rQueue = Volley.newRequestQueue(getContext());
-                rQueue.add(objectRequest);
-                rQueue.start();
+                String ip = preferences.getString("ip", "");
+                int nivel = preferences.getInt("nivel", 0);
+                int repeticiones = Integer.parseInt(txtObjetivo.getText().toString());
+                if(repeticiones > nivel * 25){
+                    Toast.makeText(ctx, "No puede exceder de "+ nivel * 25 + "repeticiones por su nivel", Toast.LENGTH_LONG).show();
+                }else {
+                    String url = "http://" + ip + "/serverejercicio/metas.php";
+                    JSONObject data = new JSONObject();
+                    data.put("meta", meta);
+                    data.put("repeticiones", repeticiones);
+                    data.put("idUsuario", String.valueOf(id));
+                    JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            cambiarMeta.setVisibility(View.GONE);
+                            progresoMeta.setVisibility(View.VISIBLE);
+                            getStats();
+                        }
+                    },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getContext(), "No se pudo cambiar la meta", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    RequestQueue rQueue = Volley.newRequestQueue(getContext());
+                    rQueue.add(objectRequest);
+                    rQueue.start();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -1,7 +1,9 @@
 package com.example.agust.gestordeejercicio;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ListAdapter extends BaseAdapter {
     private Context context;                    //contexto del fragment en el que se instance
@@ -117,6 +121,8 @@ public class ListAdapter extends BaseAdapter {
                 case 3:
                     imgDif.setImageResource(R.drawable.tresestrella);
                     break;
+                default:
+
             }
             if(r.getDia().equals(diaActivo)){
                 textView = v.findViewById(R.id.txtDia);
@@ -125,6 +131,8 @@ public class ListAdapter extends BaseAdapter {
                 textView.setVisibility(View.VISIBLE);
                 textView = v.findViewById((R.id.txtRepeticiones));
                 textView.setVisibility(View.VISIBLE);
+                textView = v.findViewById((R.id.txtDificultad));
+                textView.setVisibility(View.VISIBLE);
                 imgDif.setVisibility(View.VISIBLE);
             }else{
                 textView = v.findViewById(R.id.txtDia);
@@ -132,6 +140,8 @@ public class ListAdapter extends BaseAdapter {
                 textView = v.findViewById(R.id.txtNombre);
                 textView.setVisibility(View.GONE);
                 textView = v.findViewById((R.id.txtRepeticiones));
+                textView.setVisibility(View.GONE);
+                textView = v.findViewById((R.id.txtDificultad));
                 textView.setVisibility(View.GONE);
                 imgDif.setVisibility(View.GONE);
             }
@@ -158,6 +168,8 @@ public class ListAdapter extends BaseAdapter {
             }
             final TextView txtRepeticiones = v.findViewById(R.id.txtRepeticiones);
             SeekBar sbRepeticiones = v.findViewById(R.id.sbRepeticiones);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            sbRepeticiones.setMax(preferences.getInt("nivel", 0) * 25);
             sbRepeticiones.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(@NonNull SeekBar seekBar, int progress, boolean fromUser) {

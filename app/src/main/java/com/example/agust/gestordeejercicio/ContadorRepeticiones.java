@@ -13,6 +13,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
     private Handler handler; //Maneja la 
     int repeticiones = 0;
     int MaxRep = 0;
+    private LinearLayout Contador, Ingresar;
 
 
     private final Runnable processSensors = new Runnable() {
@@ -56,45 +60,71 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
         txtRepeticiones = findViewById(R.id.txtRepeticiones);
         txtInstruccion = findViewById(R.id.txtInstruccion);
         txtNombre = findViewById(R.id.txtNombre);
+        Ingresar = findViewById(R.id.Ingresar);
+        Contador = findViewById(R.id.Contador);
         txtNombre.setText(intent.getStringExtra("Nombre"));
         txtInstruccion.setText(intent.getStringExtra("Instruccion"));
         txtRepeticiones.setText("0");
         MaxRep = Integer.parseInt(String.valueOf(intent.getStringExtra("Repeticiones")));
         handler = new Handler();
-        findViewById(R.id.activity).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start = !start;
-                if (!start){
-                    vibrar.vibrate(500);
-                    Intent result = new Intent();
-                    result.putExtra("repeticiones", Integer.parseInt(txtRepeticiones.getText().toString()));
+        final Intent result = new Intent();
+        result.putExtra("Id", intent.getIntExtra("Id", -1));
+
+        if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {
+            Contador.setVisibility(View.VISIBLE);
+            Ingresar.setVisibility(View.GONE);
+            findViewById(R.id.activity).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    start = !start;
+                    if (!start) {
+                        vibrar.vibrate(500);
+                        result.putExtra("repeticiones", Integer.parseInt(txtRepeticiones.getText().toString()));
+                        setResult(Activity.RESULT_OK, result);
+                        finish();
+                    }
+                }
+            });
+            sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+                accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Toast.makeText(this, "No Sensor", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }else{
+            Ingresar.setVisibility(View.VISIBLE);
+            Contador.setVisibility(View.GONE);
+            Button btnIngresar = findViewById(R.id.btnIngresar);
+            btnIngresar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText txtIngresar = findViewById(R.id.txtIngresar);
+                    result.putExtra("repeticiones", Integer.parseInt(txtIngresar.getText().toString()));
+                    result.putExtra("ingreser", true);
                     setResult(Activity.RESULT_OK, result);
                     finish();
                 }
-            }
-        });
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        } else {
-            Toast.makeText(this, "No Sensor", Toast.LENGTH_SHORT).show();
-            finish();
+            });
         }
     }
 
     //onResume() register the accelerometer for listening the events
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        handler.post(processSensors);
+        if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            handler.post(processSensors);
+        }
     }
 
     //onPause() unregister the accelerometer for stop listening the events
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this);
+        if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {
+            sensorManager.unregisterListener(this);
+        }
     }
 
     @Override
