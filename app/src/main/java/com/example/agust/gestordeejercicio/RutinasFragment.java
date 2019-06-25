@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -38,6 +39,7 @@ public class RutinasFragment extends Fragment {
     Intent crearRutina;
     Spinner spinDias;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     /**
      * Al iniciar el fragment, pide a la API la rutina del usuario,
@@ -68,6 +70,7 @@ public class RutinasFragment extends Fragment {
 
         crearRutina = new Intent(this.getActivity(), CrearRutina.class);
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+        editor = preferences.edit();
         String ip = preferences.getString("ip", "");
         String url = "http://" + ip + "/serverejercicio/rutinas.php?idUsuario=" + preferences.getLong("userId", -1);
 
@@ -104,10 +107,10 @@ public class RutinasFragment extends Fragment {
                 Ejercicio ejercicio = rutina. getEjercicio();
                 Intent contarRepeticiones = new Intent(getActivity(), ContadorRepeticiones.class);
                 contarRepeticiones.putExtra("Nombre", ejercicio.getNombre());
-                contarRepeticiones.putExtra("Id", ejercicio.getId());
+                contarRepeticiones.putExtra("Id", rutina.getId());
                 contarRepeticiones.putExtra("Instruccion", ejercicio.getInstruccion());
                 contarRepeticiones.putExtra("Repeticiones", rutina.getRepeticiones());
-                startActivity(contarRepeticiones);
+                startActivityForResult(contarRepeticiones,1);
             }
         });
         return v;
@@ -118,16 +121,42 @@ public class RutinasFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Check that it is the SecondActivity with an OK result
-        if (requestCode == 0) {
+        if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 try {
                     JSONObject request = new JSONObject();
                     request.put("repeticiones", data.getIntExtra("repeticiones", -1));
+                    request.put("id", data.getIntExtra("Id", -1));
+                    request.put("nivel", preferences.getInt("nivel", 0));
+                    String ip = preferences.getString("ip", "");
+                    String url;
                     if (data.hasExtra("ingresar")){
-                        String ip = preferences.getString("ip", "");
-                        String url = "http://" + ip + "/serverejercicio/ejercicios.php";
+                        url = "http://" + ip + "/serverejercicio/ejercicios.php";
+                    }else{
+                        url = "http://" + ip + "/serverejercicio/rutinas.php";
                     }
-
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, request,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                if(response.has("nivel")){
+                                    try {
+                                        editor.putInt("nivel", response.getInt("nivel"));
+                                        editor.apply();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                            }
+                    });
+                    RequestQueue rQueue = Volley.newRequestQueue(getContext());
+                    rQueue.add(jsonObjectRequest);
+                    rQueue.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

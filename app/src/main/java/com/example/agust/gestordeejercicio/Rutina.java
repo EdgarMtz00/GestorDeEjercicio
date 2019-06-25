@@ -70,6 +70,7 @@ public class Rutina {
                 j.getString("Zona")));
         rutina.setDia(j.getString("Dia"));
         rutina.setRepeticiones(j.getString("Repeticiones"));
+        rutina.setId(j.getInt("Id"));
         return rutina;
     }
 }

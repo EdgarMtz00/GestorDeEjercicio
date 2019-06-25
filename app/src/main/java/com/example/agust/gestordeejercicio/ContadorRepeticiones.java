@@ -38,6 +38,7 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
     int repeticiones = 0;
     int MaxRep = 0;
     private LinearLayout Contador, Ingresar;
+    final Intent result = new Intent();
 
 
     private final Runnable processSensors = new Runnable() {
@@ -67,7 +68,6 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
         txtRepeticiones.setText("0");
         MaxRep = Integer.parseInt(String.valueOf(intent.getStringExtra("Repeticiones")));
         handler = new Handler();
-        final Intent result = new Intent();
         result.putExtra("Id", intent.getIntExtra("Id", -1));
 
         if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {
@@ -154,8 +154,7 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
                 }
                 if (repeticiones == MaxRep * 2) {
                     vibrar.vibrate(500);
-                    Intent result = new Intent();
-                    result.putExtra("repeticiones", repeticiones);
+                    result.putExtra("repeticiones", repeticiones/2);
                     setResult(Activity.RESULT_OK, result);
                     finish();
                 }
