@@ -50,7 +50,7 @@ public class CrearRutina extends AppCompatActivity {
         final Context ctx = this;
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         final String ip = preferences.getString("ip", "");
-        String url ="http://" + ip + "/serverejercicio/ejercicios.php";
+        String url ="http://" + ip + "/serverejercicio/ejercicios.php?idUsuario=" + preferences.getLong("userId", -1);;
         Button btnCrear = findViewById(R.id.btnCrear);
 
         btnCrear.setOnClickListener(new View.OnClickListener() {
