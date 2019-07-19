@@ -24,8 +24,9 @@ import org.json.JSONObject;
 
 public class CrearEjercicio extends AppCompatActivity {
     EditText txtNombre, txtRepeticiones;
-    Spinner spinDias;
+    Spinner spinDias, spinZona;
     private String dia;
+    int zona;
     String url;
     Long id;
     Context ctx = this;
@@ -36,6 +37,7 @@ public class CrearEjercicio extends AppCompatActivity {
         txtNombre = findViewById(R.id.txtNombre);
         txtRepeticiones = findViewById(R.id.txtRepeticiones);
         spinDias = findViewById(R.id.spinDias);
+        spinZona = findViewById(R.id.spinZona);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         id = preferences.getLong("userId", -1);
         String ip = preferences.getString("ip", "");
@@ -51,6 +53,15 @@ public class CrearEjercicio extends AppCompatActivity {
 
             }
         });
+        spinZona.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                zona = position + 1;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent){
+            }
+        });
         Button btnCrear = findViewById(R.id.btnCrear);
 
         btnCrear.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +73,7 @@ public class CrearEjercicio extends AppCompatActivity {
                     request.put("repeticiones", txtRepeticiones.getText().toString());
                     request.put("idUsuario", String.valueOf(id));
                     request.put("dia", dia);
+                    request.put("zona",zona);
 
                     JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                         @Override

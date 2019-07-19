@@ -41,6 +41,7 @@
     <string name="nombre_ejercicio">Nombre del ejercicio</string>
     <string name="dia_ejercicio">Dia en que realiza el ejercicio</string>
     <string name="repeticiones_realizar">Repeticiones que realizara</string>
+    <string name="zona_ejercicio">Zona en que se enfoca el ejercicio</string>
     <string name="crear_ejercicio">Crear Ejercicio</string>
     <string name="ingresar_rep">Ingrese las repeticiones que haya realizdo en este ejercicio</string>
     <string name="confirmar">Confirmar</string>
