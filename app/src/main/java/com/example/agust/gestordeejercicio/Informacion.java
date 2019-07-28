@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 public class Informacion extends AppCompatActivity {
 
-    TextView desc;
-    Spinner spinNivel;
+    TextView desc; //Texto donde se explica el nivel de dificultad
+    Spinner spinNivel; //Selector del nivel de dificultad
     String[] descripciones;
 
     @Override
@@ -21,12 +21,13 @@ public class Informacion extends AppCompatActivity {
         desc = findViewById(R.id.desc);
         spinNivel = findViewById(R.id.spinNivel);
         Resources res = getResources();
-        descripciones = res.getStringArray(R.array.informacion_niveles);
+        descripciones = res.getStringArray(R.array.informacion_niveles); //Se cargan las descripciones desde el archivo de strings
 
+        //Evento para cuando se selecciona un nivel
         spinNivel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                desc.setText(descripciones[position]);
+                desc.setText(descripciones[position]); //Se muestra la descripcion correspondiente al nivel seleccionado
             }
 
             @Override

@@ -22,11 +22,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DatosUsuario extends AppCompatActivity {
-    TextView txtEdad, txtPeso, txtEstatura;
+    TextView txtEdad, txtPeso, txtEstatura; //campos de datos del usuario
     Context ctx = this;
-    SharedPreferences preferences;
+    SharedPreferences preferences; //preferencias del sistema
     SharedPreferences.Editor editor;
-    Spinner spinNivel;
+    Spinner spinNivel; //selector de nivel del usuario
     int nivel = 1;
 
     @Override
@@ -44,38 +44,41 @@ public class DatosUsuario extends AppCompatActivity {
         final String url = "http://" + ip + "/ServerEjercicio/Registrar.php"; //URL de la API
         spinNivel = findViewById(R.id.spinNivel);
 
+        //Evento para cuando se selecciona un nivel
         spinNivel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nivel = position + 1;
+                nivel = position + 1; //el nivel se representa del 1 al 3 por lo que solo se toma la posicion seleccionada
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
+        //Evento para cuando se oprime el boton de confirmar
         findViewById(R.id.btnDatos).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONObject jsonObject = new JSONObject();
                 try {
+                    //recolecta todos los datos ingresados
                     jsonObject.put("edad", txtEdad.getText().toString());
                     jsonObject.put("estatura", txtEstatura.getText().toString());
                     jsonObject.put("peso", txtPeso.getText().toString());
                     jsonObject.put("id", String.valueOf(userid));
                     jsonObject.put("nivel", nivel);
-                    jsonObject.put("facebook", true);
+                    jsonObject.put("facebook", true); //marca al usuario como un usuario de fb
 
+                    //peticion para regristrar al usuario
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    editor.putLong("userId", userid);
+                                    editor.putLong("userId", userid); //se guarda la id del usuario en las preferencias
                                     editor.apply();
                                     startActivity(new Intent(ctx, MainActivity.class));
-                                    finish();
+                                    finish();//termina la actividad
                                 }
                             },
                             new Response.ErrorListener() {
@@ -84,6 +87,7 @@ public class DatosUsuario extends AppCompatActivity {
 
                                 }
                             });
+                    //inicia la peticion de registro
                     RequestQueue rQueue = Volley.newRequestQueue(ctx);
                     rQueue.add(jsonRequest);
                     rQueue.start();

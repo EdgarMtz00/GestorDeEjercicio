@@ -32,7 +32,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     SharedPreferences.Editor editor; //Editor de preferencias
     EditText etCorreo, etContrasena; //Campos de corre y contraseña
     Button btnInicio;
-    LoginButton loginButton; //Boton para iniciar sesion
+    LoginButton loginButton; //Boton para iniciar sesion con facebook
     String url;
     Context ctx = this;
     CallbackManager callbackManager = CallbackManager.Factory.create();
@@ -43,13 +43,11 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /**
-     * Inicializa elementos del activity
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
+        //Configuracion de la vista
         etContrasena = findViewById(R.id.etContrasena);
         etCorreo = findViewById(R.id.etCorreo);
         btnInicio = findViewById(R.id.btnInicio);
@@ -58,13 +56,10 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         String ip = preferences.getString("ip", "");
         url = "http://" + ip + "/ServerEjercicio/IniciarSesion.php"; //Url de la API
         btnInicio.setOnClickListener(this);
-
-
-
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email");
 
-        // Callback registration
+        // registra un metodo que se llamara cuando se obtenga la respuesta de facebook
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -106,7 +101,6 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCancel() {
             }
-
             @Override
             public void onError(FacebookException exception) {
             }
@@ -127,8 +121,11 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         if (Utils.validateEmail(correo) && Utils.validateText(correo)){
             JSONObject data = new JSONObject();
             try {
+                //obtiene los datos ingresados
                 data.put("correo", correo);
                 data.put("pwd", contrasena);
+
+                //peticion para iniciar sesion
                 JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -150,7 +147,6 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     /**
      * Guarda el id del usuario en las preferencias y accede a MainActivity
      * @param jsonObject: json obtenido de la peticion a la API
@@ -159,9 +155,9 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         try {
             if(jsonObject.getBoolean("logIn")){
                 editor.putLong("userId", jsonObject.getInt("id"));
-                editor.putInt("nivel", jsonObject.getInt("nivel"));
+                editor.putInt("nivel", jsonObject.getInt("nivel")); //Se guarda el id y nivel del usuario
                 editor.apply();
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, MainActivity.class)); //da acceso a la aplicacion
                 finish();
             }else{
                 retry();
@@ -172,7 +168,6 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     /**
      * Notifica al usuario si falla el inicio de sesion
      */
@@ -180,10 +175,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(this, "Bad Credentials", Toast.LENGTH_SHORT).show();
     }
 
-    public void onClickFacebook(View v){
-
-    }
-
+    //inicia la actividad de registro
     public void onClickRegistro(View v){
         startActivity( new Intent(this, Registro.class));
     }

@@ -107,14 +107,15 @@ public class Cronometro extends Fragment implements SensorEventListener {
         sManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
+        //Evento de cambio en swCorrer
         swCorrer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                correr = isChecked;
-                if (correr) {
+                correr = isChecked; //activa o desactiva el modo correr
+                if (correr) {//muestra la distancia y pasos
                     txtDistancia.setVisibility(View.VISIBLE);
                     txtPasos.setVisibility(View.VISIBLE);
-                }else {
+                }else {//oculta la distancia y pasos
                     txtDistancia.setVisibility(View.GONE);
                     txtDistancia.setVisibility(View.GONE);
                 }
@@ -132,22 +133,22 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 clickInicio = !clickInicio;
                 if(clickInicio){
                     txtTiempo.setVisibility(View.GONE);
-                    crono.setBase(SystemClock.elapsedRealtime());
+                    crono.setBase(SystemClock.elapsedRealtime());//inicializa el cronometro
                     crono.start();
-                    timerProgress.start();
+                    timerProgress.start();//inicia el progress bar para que vata a la par del cronometro
                     btnInicio.setText("DETENER");
                     progreso--;
                     btnPausa.setVisibility(View.VISIBLE);
                 }else{
-                    crono.stop();
+                    crono.stop(); //detiene el cronometro
                     timerProgress.cancel();
-                    guardarTiempo(progreso);
+                    guardarTiempo(progreso); //envia el tiempo a la peticion para guardarlo
                     progreso = 0;
-                    progresoTemp = 0;
+                    progresoTemp = 0;//reinicia el tiempo
                     prgReloj.setProgress(progreso);
                     crono.setBase(SystemClock.elapsedRealtime());
                     steps = 0;
-                    distance = 0;
+                    distance = 0;//reinicia la distancia y los pasos
                     btnInicio.setText("INICIAR");
                     btnPausa.setVisibility(View.GONE);
                 }
@@ -166,12 +167,12 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 {
                     clickPausa = !clickPausa;
                     if(clickPausa){
-                        progresoTemp = crono.getBase() - SystemClock.elapsedRealtime();
-                        crono.stop();
+                        progresoTemp = crono.getBase() - SystemClock.elapsedRealtime(); //guarda el tiempo actual
+                        crono.stop(); //pausa el cronometro
                         timerProgress.cancel();
                         btnPausa.setText("REANUDAR");
                     }else{
-                        crono.setBase(SystemClock.elapsedRealtime() + progresoTemp);
+                        crono.setBase(SystemClock.elapsedRealtime() + progresoTemp); //empieza de nuevo el cronometro y le suma el tiempo que llevaba
                         crono.start();
                         timerProgress.start();
                         btnPausa.setText("PAUSAR");
@@ -189,12 +190,16 @@ public class Cronometro extends Fragment implements SensorEventListener {
         Long id = preferences.getLong("userId", -1);
         String ip = preferences.getString("ip", "");
         final String url = "http://" + ip + "/ServerEjercicio/tiempo.php"; //URL de la API
+
         try {
+            //recolectar la informacion que se guardara
             if (correr) {
-                request.put("Correr", true);
+                request.put("Correr", true); //indica si la medicion fue de correr o de ejercitar
             }
             request.put("tiempo", tiempo);
             request.put("idUsuario", id.toString());
+
+            //peticion para guardar el tiempo
             JsonObjectRequest setTiempo = new JsonObjectRequest(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -202,7 +207,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
                         try {
                             txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
                                     + response.getInt("tiempo") + "\n" +response.getInt("porcentaje")
-                                    + "% en comparacion al recorrido anterior");
+                                    + "% en comparacion al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
                             txtTiempo.setVisibility(View.VISIBLE);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -216,33 +221,22 @@ public class Cronometro extends Fragment implements SensorEventListener {
 
                 }
             });
+
+            //Inicia la peticion del tiempo
             RequestQueue rQueue = Volley.newRequestQueue(getContext());
             rQueue.add(setTiempo);
             rQueue.start();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        sManager.unregisterListener(this, stepSensor);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Sensor sensor = event.sensor;
+        Sensor sensor = event.sensor; //toma la informacion del sensor de pasos
         if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR && clickInicio && correr) {
-            steps++;
-            distance = (float)(steps*78)/(float)100;
+            steps++; //suma cada paso
+            distance = (float)(steps*78)/(float)100; //calcula la distancia
             txtPasos.setText("Pasos:" + steps);
             txtDistancia.setText("Distancia: " + distance + "m");
         }
@@ -252,6 +246,4 @@ public class Cronometro extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
-
 }

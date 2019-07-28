@@ -14,6 +14,7 @@ public class Receiver extends BroadcastReceiver {
         showNotification(context);
     }
 
+    //Crea la notificacion que enviara la app
     public void showNotification(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);

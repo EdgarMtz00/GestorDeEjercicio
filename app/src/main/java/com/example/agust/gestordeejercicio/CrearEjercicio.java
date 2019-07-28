@@ -23,9 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CrearEjercicio extends AppCompatActivity {
-    EditText txtNombre, txtRepeticiones;
-    Spinner spinDias;
-    private String dia;
+    EditText txtNombre, txtRepeticiones; //Campos de nombre y repeticiones a realizar
+    Spinner spinDias; //Opciones de que dias se realizara el ejercicio
+    private String dia; //dia seleccionado
     String url;
     Long id;
     Context ctx = this;
@@ -39,7 +39,12 @@ public class CrearEjercicio extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         id = preferences.getLong("userId", -1);
         String ip = preferences.getString("ip", "");
-        url = "http://" + ip + "/serverejercicio/ejercicios.php";
+        url = "http://" + ip + "/serverejercicio/ejercicios.php"; //url de la API
+        Button btnCrear = findViewById(R.id.btnCrear);
+
+        /**
+         * cuando se selecciona un dia en spinDias se llama a setDia para guardarlo
+         */
         spinDias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -51,35 +56,40 @@ public class CrearEjercicio extends AppCompatActivity {
 
             }
         });
-        Button btnCrear = findViewById(R.id.btnCrear);
 
+        /**
+         * Evento para guardar el ejercicio creado
+         */
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final JSONObject request = new JSONObject();
                 try {
+                    //Se toman los datos ingresados y el id del usuario
                     request.put("nombre", txtNombre.getText().toString());
-                    request.put("repeticiones", txtRepeticiones.getText().toString());
+                    request.put("repeticiones", txtRepeticiones.getText().toString())
                     request.put("idUsuario", String.valueOf(id));
                     request.put("dia", dia);
 
+                    //peticion a la API para almcenar los cambios
                     JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            if (response.has("msg")){
+                            if (response.has("msg")) {//si se obtiene una respuesta
                                 Toast.makeText(ctx, "Ejercicio Añadido", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }else{
-                                Toast.makeText(ctx, "No se pudo registrar el ejercicio", Toast.LENGTH_SHORT).show();
+                                finish();//termina la actividad
+                            } else {
+                                Toast.makeText(ctx, "No se pudo registrar el ejercicio", Toast.LENGTH_SHORT).show(); //mensaje de error en la respuesta
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(ctx, "No se pudo registrar el ejercicio", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "No se pudo registrar el ejercicio", Toast.LENGTH_SHORT).show(); //mensaje de error en la peticion
                         }
                     });
 
+                    //inicia la peticion
                     RequestQueue rQueue = Volley.newRequestQueue(ctx);
                     rQueue.add(objectRequest);
                     rQueue.start();
@@ -93,6 +103,7 @@ public class CrearEjercicio extends AppCompatActivity {
 
     }
 
+    //Guarda el dia elegido
     public void setDia(String dia){
         this.dia = dia;
     }

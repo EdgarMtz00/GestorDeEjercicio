@@ -28,14 +28,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 public class CrearRutina extends AppCompatActivity {
-    ListView lvEjercicios;
-    ListAdapter listAdapter;
-    TextView txtDia;
+    ListView lvEjercicios;//Lista de elementos
+    ListAdapter listAdapter;//controlador de la lista
+    TextView txtDia;//Dia al que se agrega la rutina
     int numDia = 0;
     static String[] dias = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
     Button btnSig;
-    JSONArray ejercicios;
-    Spinner spinZonas;
+    JSONArray ejercicios; // ejercicios soportados por la api
+    Spinner spinZonas; // Selector de filtro de zona
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,7 @@ public class CrearRutina extends AppCompatActivity {
         String url ="http://" + ip + "/serverejercicio/ejercicios.php?idUsuario=" + preferences.getLong("userId", -1);;
         Button btnCrear = findViewById(R.id.btnCrear);
 
+        //Evento parainiciar la actividad de CrearEjercicio
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +61,11 @@ public class CrearRutina extends AppCompatActivity {
             }
         });
 
+        //Evento activado cuando se selecciona una zona
         spinZonas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                listAdapter.zonaActiva = spinZonas.getSelectedItem().toString();
+                listAdapter.zonaActiva = spinZonas.getSelectedItem().toString(); //desde el controlador se muestran solo los ejercicios de dicha zona
                 lvEjercicios.setAdapter(listAdapter);
             }
 
@@ -73,12 +75,13 @@ public class CrearRutina extends AppCompatActivity {
             }
         });
 
+        //Peticion de ejercicios a la API
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, new JSONArray(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
-                        listAdapter.setEjercicios(jsonArray);
-                        lvEjercicios.setAdapter(listAdapter);
+                        listAdapter.setEjercicios(jsonArray); //se cargan en el controlador
+                        lvEjercicios.setAdapter(listAdapter); //se asocia la vista con el controlador
                         ejercicios = jsonArray;
                     }
                 }, new Response.ErrorListener() {
@@ -87,11 +90,12 @@ public class CrearRutina extends AppCompatActivity {
 
             }
         });
-
+        //Inicia la peticion de ejercicios
         RequestQueue rQueue = Volley.newRequestQueue(this);
         rQueue.add(arrayRequest);
         rQueue.start();
 
+        //Cuando se selecciona un ejercicio se marca de verde
         lvEjercicios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -100,44 +104,50 @@ public class CrearRutina extends AppCompatActivity {
             }
         });
 
+        /*
+        Evento de btnSig
+         */
         btnSig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONArray rutina = new JSONArray();
-                for (int i = 0; i < listAdapter.getCount(); i++){
+                for (int i = 0; i < listAdapter.getCount(); i++){ // recorre los ejercicios actuales
                     Ejercicio ejercicio = (Ejercicio) listAdapter.getItem(i);
-                    if(ejercicio.getRepeticiones() > 0) {
+                    if(ejercicio.getRepeticiones() > 0) { //si se le ha asignado un numero de repeticiones a alguno
                         Long idUsuario = preferences.getLong("userId", -1);
                         String dia = txtDia.getText().toString();
                         try {
-                            rutina.put(ejercicio.JsonParse(idUsuario, dia));
+                            rutina.put(ejercicio.JsonParse(idUsuario, dia)); // se registra como parte de la rutina
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 }
+
                 String url ="http://" + ip + "/serverejercicio/rutinas.php";
+                //Peticion para guardar la rutina
                 JsonArrayRequest postRutina = new JsonArrayRequest(Request.Method.POST, url, rutina,
                     new Response.Listener<JSONArray>() {
                         @Override
-                        public void onResponse(JSONArray response) {
+                        public void onResponse(JSONArray response) {//si la peticion es correcta
                             listAdapter.setEjercicios(ejercicios);
-                            lvEjercicios.setAdapter(listAdapter);
-                            numDia++;
+                            lvEjercicios.setAdapter(listAdapter);//se reinicia la lista de ejercicios
+                            numDia++; // y avanza al siguiente dia
                             if(numDia < dias.length) {
                                 txtDia.setText(dias[numDia]);
-                            }else{
+                            }else{//si ya recorrieron todos los dias
                                 startActivity(new Intent(ctx, MainActivity.class));
-                                finish();
+                                finish(); // se termina la actividad
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(ctx, "error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ctx, "error", Toast.LENGTH_SHORT).show(); //Mensaje de error en la peticion
                         }
                    });
+                //inicia la peticion de la rutina
                 RequestQueue rQueue = Volley.newRequestQueue(ctx);
                 rQueue.add(postRutina);
                 rQueue.start();

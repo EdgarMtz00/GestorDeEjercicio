@@ -37,8 +37,7 @@ public class Metas extends Fragment {
     SharedPreferences preferences;
     TextView txtProm, txtRecord, txtUltimas, txtMeta, txtNumRep, txtAlcanzado;
     EditText txtObjetivo;
-    Context ctx = getContext();
-
+    Context ctx;
     View.OnClickListener elegirMeta = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -131,7 +130,7 @@ public class Metas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_metas, container, false);
-
+        ctx = getContext();
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         btnCambiarMeta = v.findViewById(R.id.btnCambiarMeta);
         btnMedir = v.findViewById(R.id.btnMedirMeta);

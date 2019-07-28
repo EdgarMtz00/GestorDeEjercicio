@@ -34,20 +34,18 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
     private TextView txtRepeticiones, txtNombre, txtInstruccion; //Texto con la informacion del ejercicio
     private Intent intent;
     private boolean flag = false; //Se activa cuando ha pasado el tiempo suficiente para realizar otra medicion
-    private Handler handler; //Maneja la 
+    private Handler handler; //Maneja el tiempo en el que se ejecuta setFlag
     int repeticiones = 0;
     int MaxRep = 0;
     private LinearLayout Contador, Ingresar;
     final Intent result = new Intent();
 
 
-    private final Runnable processSensors = new Runnable() {
+    private final Runnable setFlag = new Runnable() {
         @Override
         public void run() {
-            // Do work with the sensor values.
             flag = true;
-            // The Runnable is posted to run again here:
-            handler.postDelayed(this, interval);
+            handler.postDelayed(this, interval);//cada .670 milisegundos se vuelve a ejecutar
         }
     };
 
@@ -70,14 +68,15 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
         handler = new Handler();
         result.putExtra("Id", intent.getIntExtra("Id", -1));
 
-        if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {
+        if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {//si se esta realizando un ejercicio de la aplicacion
             Contador.setVisibility(View.VISIBLE);
             Ingresar.setVisibility(View.GONE);
+            //evento activado cuando se toca la pantalla
             findViewById(R.id.activity).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    start = !start;
-                    if (!start) {
+                    start = !start; //la primera vez hace start verdadero
+                    if (!start) { // la segunda vez termina la actividad
                         vibrar.vibrate(500);
                         result.putExtra("repeticiones", Integer.parseInt(txtRepeticiones.getText().toString()));
                         setResult(Activity.RESULT_OK, result);
@@ -85,22 +84,24 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
                     }
                 }
             });
+            //Registra el acelerometro  en el administrador de sensores de android
             sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) { //revisa si tenemos acelerometro
                 accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
                 sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
             } else {
-                Toast.makeText(this, "No Sensor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No Sensor", Toast.LENGTH_SHORT).show();//si no hay acelerometro informa al usuario y termina sin resultado
                 finish();
             }
-        }else{
+        }else{ //si se esta realizando un ejercicio agregado por el usuario
             Ingresar.setVisibility(View.VISIBLE);
             Contador.setVisibility(View.GONE);
-            Button btnIngresar = findViewById(R.id.btnIngresar);
+            Button btnIngresar = findViewById(R.id.btnIngresar);//se muestra un campo de texto y un boton de ingersar
             btnIngresar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     EditText txtIngresar = findViewById(R.id.txtIngresar);
+                    //el usuario ingresa sus repeticiones manualmente y se termina la actividad
                     result.putExtra("repeticiones", Integer.parseInt(txtIngresar.getText().toString()));
                     result.putExtra("ingreser", true);
                     setResult(Activity.RESULT_OK, result);
@@ -110,16 +111,16 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
         }
     }
 
-    //onResume() register the accelerometer for listening the events
+    //onResume() volver a usar el aceleromtro
     protected void onResume() {
         super.onResume();
         if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            handler.post(processSensors);
+            handler.post(setFlag);
         }
     }
 
-    //onPause() unregister the accelerometer for stop listening the events
+    //onPause() dejar de usar el acelerometro
     protected void onPause() {
         super.onPause();
         if(!intent.getStringExtra("Instruccion").equals("Realice el ejercicio")) {
@@ -133,28 +134,29 @@ public class ContadorRepeticiones extends Activity implements SensorEventListene
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(flag && start) {
-
-            // get the change of the x,y,z values of the accelerometer
+        if(flag && start) { // flag es activada por el timer para tener un intervalo entre mediciones
+            //start se activa cuando el usuario toca la pantalla
+            // cambio de aceleracion en cada vector
             deltaX = Math.abs(lastX - event.values[0]);
             deltaY = Math.abs(lastY - event.values[1]);
             deltaZ = Math.abs(lastZ - event.values[2]);
-
+            // nueva aceleracion en cada vector
             lastX = event.values[0];
             lastY = event.values[1];
             lastZ = event.values[2];
 
+            //si el cambio de aceleracion supera el valor minimo
             if ((deltaX > vibrateThreshold) || (deltaZ > vibrateThreshold) && (deltaY < vibrateThreshold)) {
-                repeticiones++;
+                repeticiones++; //se cuenta cada movimiento
                 Log.d("myApp", "onSensorChanged: delta Z = " + deltaZ);
                 Log.d("myApp", "onSensorChanged: delta x = " + deltaX);
                 Log.d("myApp", "onSensorChanged: delta y = " + deltaY);
-                if(repeticiones % 2 == 0) {
+                if(repeticiones % 2 == 0) { // y se suma una repeticion por cada dos movimientos (arriba y abajo)
                     txtRepeticiones.setText(String.valueOf(repeticiones/2));
                 }
-                if (repeticiones == MaxRep * 2) {
+                if (repeticiones == MaxRep * 2) { // una vez alcanzado el numero de repeticiones a realizar
                     vibrar.vibrate(500);
-                    result.putExtra("repeticiones", repeticiones/2);
+                    result.putExtra("repeticiones", repeticiones/2); // se termina la actividad regresando las repeticiones hechas
                     setResult(Activity.RESULT_OK, result);
                     finish();
                 }

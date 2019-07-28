@@ -101,6 +101,7 @@ public class ListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater vLink = LayoutInflater.from(context);
         if(type) {
+            //Prepara la vista de una rutina
             Rutina r = rutinas.get(position);
             View v = vLink.inflate(R.layout.rutina, null);
 
@@ -111,6 +112,8 @@ public class ListAdapter extends BaseAdapter {
             textView = v.findViewById((R.id.txtRepeticiones));
             textView.setText(r.getRepeticiones());
             ImageView imgDif = v.findViewById(R.id.imgDif);
+
+            //Dependiendo del valor de dificultad se muestra la imagen con el mismo numero de estrelas
             switch (r.getEjercicio().getDificultad()){
                 case 1:
                     imgDif.setImageResource(R.drawable.unaestrella);
@@ -124,6 +127,8 @@ public class ListAdapter extends BaseAdapter {
                 default:
 
             }
+
+            //Si el dia seleccionado en la actividad de rutinas es igual al de esta rutina se muestra
             if(r.getDia().equals(diaActivo)){
                 textView = v.findViewById(R.id.txtDia);
                 textView.setVisibility(View.VISIBLE);
@@ -134,7 +139,7 @@ public class ListAdapter extends BaseAdapter {
                 textView = v.findViewById((R.id.txtDificultad));
                 textView.setVisibility(View.VISIBLE);
                 imgDif.setVisibility(View.VISIBLE);
-            }else{
+            }else{ //si no se ocultan todos sus elementos
                 textView = v.findViewById(R.id.txtDia);
                 textView.setVisibility(View.GONE);
                 textView = v.findViewById(R.id.txtNombre);
@@ -147,14 +152,16 @@ public class ListAdapter extends BaseAdapter {
             }
             return v;
         }else{
+            //prepara la vista de un ejercicio
             final View v = vLink.inflate(R.layout.ejercicio, null);
             Ejercicio e = ejercicios.get(position);
-
             TextView textView = v.findViewById(R.id.txtNombre);
             textView.setText(e.getNombre());
             textView = v.findViewById((R.id.txtInstruccion));
             textView.setText(e.getInstruccion());
             ImageView imgDif = v.findViewById(R.id.imgDif);
+
+            //Dependiendo del valor de dificultad se muestra la imagen con el mismo numero de estrelas
             switch (e.getDificultad()){
                 case 1:
                     imgDif.setImageResource(R.drawable.unaestrella);
@@ -166,15 +173,19 @@ public class ListAdapter extends BaseAdapter {
                     imgDif.setImageResource(R.drawable.tresestrella);
                     break;
             }
+
             final TextView txtRepeticiones = v.findViewById(R.id.txtRepeticiones);
-            SeekBar sbRepeticiones = v.findViewById(R.id.sbRepeticiones);
+            SeekBar sbRepeticiones = v.findViewById(R.id.sbRepeticiones); //barra para seleccionar el numero de repeticines
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            sbRepeticiones.setMax(preferences.getInt("nivel", 0) * 25);
+            sbRepeticiones.setMax(preferences.getInt("nivel", 0) * 25); //Se configura el maximo de repeticiones para el usuario
+            //Evento para cuando se selecciona un valor de repeticiones
             sbRepeticiones.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(@NonNull SeekBar seekBar, int progress, boolean fromUser) {
                     txtRepeticiones.setText(String.valueOf(progress));
+                    // se guarda el valor en el objeto correspondiente a la vista modificada
                     ejercicios.get(position).setRepeticiones(progress);
+                    //si es mayor a cero se marca de verde para indicar que sera agregado a la rutina
                     if(progress != 0){
                         v.setBackgroundColor(Color.GREEN);
                     }else{
@@ -191,7 +202,7 @@ public class ListAdapter extends BaseAdapter {
 
                 }
             });
-
+            //Si la zona seleccionado en la actividad de CrearRutinas es igual al de este ejercicio se muestra
             if(!e.getZona().equals(zonaActiva)) {
                 textView = v.findViewById(R.id.txtDificultad);
                 textView.setVisibility(View.GONE);
@@ -202,7 +213,7 @@ public class ListAdapter extends BaseAdapter {
                 imgDif.setVisibility(View.GONE);
                 txtRepeticiones.setVisibility(View.GONE);
                  sbRepeticiones.setVisibility(View.GONE);
-            }else{
+            }else{ //si no se ocultan todos sus elementos
                 textView = v.findViewById(R.id.txtDificultad);
                 textView.setVisibility(View.VISIBLE);
                 textView = v.findViewById(R.id.txtNombre);

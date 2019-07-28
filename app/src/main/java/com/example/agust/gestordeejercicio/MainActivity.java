@@ -21,15 +21,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //configuracion de la vista
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
-
         tabLayout.setupWithViewPager(viewPager);
+
+        //configuracion de preferencias
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("ip", "192.168.1.76");
         editor.apply();
+
+        //Revisa si ya hay un usuario en las preferencias, si no abre la actividad de iniciar sesion
         Long id = preferences.getLong("userId", -1);
         if (String.valueOf(id).equals("-1")){
             Intent Sesion = new Intent(this, InicioSesion.class);
@@ -37,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+        //Configuracion de notificaciones
         Intent intent = new Intent(MainActivity.this, Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
         am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
+    //metodo para poder activar o desactivar las notificaciones desde otras actividadades
     public void notificaciones(boolean active){
         if(active) {
             am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //metodo para poder cambiar el intervalo de las las notificaciones desde otras actividadades
     public  void setInterval(long interval){
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
     }

@@ -48,10 +48,11 @@ public class Registro extends AppCompatActivity {
         url = "http://" + ip + "/ServerEjercicio/Registrar.php"; //URL de la API
         spinNivel = findViewById(R.id.spinNivel);
 
+        //Evento para cuando se selecciona un nivel
         spinNivel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nivel = position + 1;
+                nivel = position + 1;//el nivel se representa del 1 al 3 por lo que solo se toma la posicion seleccionada
             }
 
             @Override
@@ -71,15 +72,17 @@ public class Registro extends AppCompatActivity {
     public void onClickRegistro(View v){
         String correo, pwd, estatura, edad, peso;
         if(etContrasena.getText().toString().equals(etPwd.getText().toString())) {
+            //se recolecta la informacion ingresada
             correo = etCorreo.getText().toString();
             pwd = etContrasena.getText().toString();
             edad = etEdad.getText().toString();
             estatura = etEstatura.getText().toString();
             peso = etPeso.getText().toString();
             String[] input ={correo, pwd, edad, estatura, peso};
-            if(Utils.validateText(input)) {
+            if(Utils.validateText(input)) {//si es validada
                 JSONObject data = new JSONObject();
                 try {
+                    //se almacena en el json que se enviara en la peticion
                     data.put("correo", correo);
                     data.put("contrasena", pwd);
                     data.put("edad", Integer.parseInt(edad));
@@ -87,11 +90,12 @@ public class Registro extends AppCompatActivity {
                     data.put("estatura", Integer.parseInt(estatura));
                     data.put("nivel", nivel);
 
+                    //peticion para registrar un usuario
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    logIn(response);
+                                    logIn(response); //si no falla la peticion procede a iniciar la sesion recien creada
                                 }
                             },
                             new Response.ErrorListener() {
@@ -100,14 +104,18 @@ public class Registro extends AppCompatActivity {
 
                                 }
                             });
+
+                    //inicia la peticion de registrar
                     RequestQueue rQueue = Volley.newRequestQueue(this);
                     rQueue.add(jsonRequest);
                     rQueue.start();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }else{
+            //Datos no validos
             Toast.makeText(this, "Las contraseñas deben ser iguales", Toast.LENGTH_SHORT).show();
         }
     }
@@ -124,11 +132,14 @@ public class Registro extends AppCompatActivity {
      */
     public void logIn(JSONObject data){
         try {
+            //guarda el id y nivel del usuario en las preferencias
             Toast.makeText(this, "Registrado" + data.getString("msg"), Toast.LENGTH_SHORT).show();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putLong("userId", (long) data.getInt("id"));
             editor.putInt("nivel", data.getInt("nivel"));
             editor.apply();
+
+            //inicia la actividad principal
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } catch (JSONException e) {

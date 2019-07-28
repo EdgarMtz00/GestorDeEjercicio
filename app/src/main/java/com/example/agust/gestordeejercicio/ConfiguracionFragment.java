@@ -35,13 +35,13 @@ import org.json.JSONObject;
 
 
 public class ConfiguracionFragment extends Fragment {
-    EditText etPeso, etEdad, etEstatura;
-    TextView txtImc;
-    Button btnCambio, btnCerrar;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    Spinner spinIntervalo;
-    Switch swNotificacion;
+    EditText etPeso, etEdad, etEstatura;//campos para ingresar edad, peso y estatura
+    TextView txtImc; //Texto del Indice de Masa Corporal
+    Button btnCambio, btnCerrar; //Botones para cambiar datos y cerrar sesion
+    SharedPreferences preferences; //preferencias del sistema
+    SharedPreferences.Editor editor; //Editor de preferencias
+    Spinner spinIntervalo; //Selector de tiempo para recibir notificaciones
+    Switch swNotificacion; //Activar y desactivar notificaciones
     @Override
     public View onCreateView(LayoutInflater inflater,
                  ViewGroup container, Bundle savedInstanceState) {
@@ -56,25 +56,31 @@ public class ConfiguracionFragment extends Fragment {
         spinIntervalo = v.findViewById(R.id.spinIntervalo);
         swNotificacion = v.findViewById(R.id.notificaciones);
 
+        /**
+         * Evento activado cuando se cambia swNotificaciones
+         */
         swNotificacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ((MainActivity)getActivity()).notificaciones(isChecked);
+                ((MainActivity)getActivity()).notificaciones(isChecked);//Cambia el estado de las notificaciones en el MainActivity
             }
         });
 
+        /**
+         *Evento activado cuando se selecciona una opcion de spinIntervalo
+         */
         spinIntervalo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY);
+                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY); //Cambia la frecuencia de notificaciones por una cada dia
                         break;
                     case 1:
-                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY * 7);
+                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY * 7); //Cambia la frecuencia de notificaciones por una cada semana
                         break;
                     case 2:
-                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY * 30);
+                        ((MainActivity)getActivity()).setInterval(AlarmManager.INTERVAL_DAY * 30); //Cambia la frecuencia de notificaciones por una cada mes
                         break;
                 }
             }
@@ -116,6 +122,7 @@ public class ConfiguracionFragment extends Fragment {
 
                     }
         });
+        //inicia la peticion del IMC
         RequestQueue rQueue = Volley.newRequestQueue(getContext());
         rQueue.add(imcRequest);
         rQueue.start();
@@ -145,6 +152,7 @@ public class ConfiguracionFragment extends Fragment {
             public void onClick(View v) {
                 JSONObject jsonObject = new JSONObject();
                 try {
+                    //Se revisa que campos no estan vacios y se guarda su valor
                     jsonObject.put("idUsuario",  String.valueOf(preferences.getLong("userId", -1)));
                     if(!etEdad.getText().toString().equals("")){
                         jsonObject.put("edad", Integer.parseInt(etEdad.getText().toString()));
@@ -161,6 +169,7 @@ public class ConfiguracionFragment extends Fragment {
                 String ip = preferences.getString("ip", "");
                 String url = "http://" + ip + "/ServerEjercicio/usuario.php"; //URL de la API
 
+                //Cuando se recibe la respuesta de que se han guardado los datos se limpian los campos
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonObject,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -177,9 +186,9 @@ public class ConfiguracionFragment extends Fragment {
 
                             }
                         });
+                //inicia la peticion para guardar los cambios
                 RequestQueue rQueue = Volley.newRequestQueue(getContext());
                 rQueue.add(jsonObjectRequest);
-                rQueue.add(imcRequest);
                 rQueue.start();
             }
         });
