@@ -16,7 +16,7 @@
         android:hint="Edad"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinNivel" />
+        app:layout_constraintTop_toBottomOf="@+id/spinTipo" />
 
     <EditText
         android:id="@+id/etContrasena"
@@ -66,8 +66,30 @@
         android:layout_height="wrap_content"
         android:entries="@array/niveles"
         app:layout_constraintTop_toBottomOf="@id/etPwd"
+        app:layout_constraintBottom_toTopOf="@id/spinTipo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/txtEnfoque"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/spinNivel"
         app:layout_constraintBottom_toTopOf="@id/etPeso"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/spinTipo"
+        android:text="Enfoque de la rutina que quiere"
+        android:textSize="12sp"
+        />
+
+    <Spinner
+        android:id="@+id/spinTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/spinNivel"
+        app:layout_constraintBottom_toTopOf="@id/etPeso"
+        app:layout_constraintStart_toEndOf="@id/txtEnfoque"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="15dp"/>
 
@@ -134,7 +156,7 @@
         android:hint="Peso"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinNivel" />
+        app:layout_constraintTop_toBottomOf="@+id/spinTipo" />
 
     <EditText
         android:id="@+id/etEstatura"
@@ -148,6 +170,6 @@
         android:inputType="number"
         app:layout_constraintEnd_toStartOf="@+id/etEdad"
         app:layout_constraintStart_toEndOf="@+id/etPeso"
-        app:layout_constraintTop_toBottomOf="@+id/spinNivel" />
+        app:layout_constraintTop_toBottomOf="@+id/spinTipo" />
 
 </android.support.constraint.ConstraintLayout>

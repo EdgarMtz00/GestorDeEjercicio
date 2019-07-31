@@ -99,7 +99,7 @@ public class ConfiguracionFragment extends Fragment {
         btnCambio = v.findViewById(R.id.btnCambio);       //Boton para guardar cambios
 
         String ip = preferences.getString("ip", "");
-        String url = "http://" + ip + "/ServerEjercicio/imc.php?idUsuario=" + preferences.getLong("userId", -1); //URL de la API
+        String url = "http://" + ip + "/ServerEjercicio/imc.php?idUsuario=" + preferences.getString("userId", "-1"); //URL de la API
 
         final JsonObjectRequest imcRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -153,7 +153,7 @@ public class ConfiguracionFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     //Se revisa que campos no estan vacios y se guarda su valor
-                    jsonObject.put("idUsuario",  String.valueOf(preferences.getLong("userId", -1)));
+                    jsonObject.put("idUsuario",  preferences.getString("userId", "-1"));
                     if(!etEdad.getText().toString().equals("")){
                         jsonObject.put("edad", Integer.parseInt(etEdad.getText().toString()));
                     }

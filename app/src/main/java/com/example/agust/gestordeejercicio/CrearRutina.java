@@ -50,7 +50,7 @@ public class CrearRutina extends AppCompatActivity {
         final Context ctx = this;
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         final String ip = preferences.getString("ip", "");
-        String url ="http://" + ip + "/serverejercicio/ejercicios.php?idUsuario=" + preferences.getLong("userId", -1);;
+        String url ="http://" + ip + "/serverejercicio/ejercicios.php?idUsuario=" + preferences.getString("userId", "-1");
         Button btnCrear = findViewById(R.id.btnCrear);
 
         //Evento parainiciar la actividad de CrearEjercicio
@@ -114,7 +114,7 @@ public class CrearRutina extends AppCompatActivity {
                 for (int i = 0; i < listAdapter.getCount(); i++){ // recorre los ejercicios actuales
                     Ejercicio ejercicio = (Ejercicio) listAdapter.getItem(i);
                     if(ejercicio.getRepeticiones() > 0) { //si se le ha asignado un numero de repeticiones a alguno
-                        Long idUsuario = preferences.getLong("userId", -1);
+                        String idUsuario = preferences.getString("userId", "-1");
                         String dia = txtDia.getText().toString();
                         try {
                             rutina.put(ejercicio.JsonParse(idUsuario, dia)); // se registra como parte de la rutina

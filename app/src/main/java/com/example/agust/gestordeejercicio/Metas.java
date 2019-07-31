@@ -44,7 +44,7 @@ public class Metas extends Fragment {
             String meta = ((Button)v).getText().toString();
             meta = (meta.equals("Push up"))? "Brazos" : (meta.equals("Abdominales"))? "Abdomen" : "Piernas";
             try {
-                Long id = preferences.getLong("userId", -1);
+                String id = preferences.getString("userId", "-1");
                 String ip = preferences.getString("ip", "");
                 int nivel = preferences.getInt("nivel", 0);
                 if (!txtObjetivo.getText().equals("")) {
@@ -209,7 +209,7 @@ public class Metas extends Fragment {
     }
 
     public void getStats(){
-        Long id = preferences.getLong("userId", -1);
+        String id = preferences.getString("userId", "-1");
         String ip = preferences.getString("ip", "");
         String url = "http://" + ip + "/serverejercicio/metas.php?idUsuario=" + id;
         JsonObjectRequest requestStats = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

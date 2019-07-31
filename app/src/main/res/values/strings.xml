@@ -73,6 +73,11 @@
         <item>Jueves</item>
         <item>Viernes</item>
     </string-array>
+    <string-array name="opciones">
+        <item>Acondicionamiento</item>
+        <item>Martes</item>
+        <item>Miercoles</item>
+    </string-array>
     <string-array name="informacion_niveles">
         <item>El nivel para principiante está diseñado para cualquier persona que desee comenzar a realizar ejercicior. Se te
                 asignará una rutina de acondicionamiento.</item>

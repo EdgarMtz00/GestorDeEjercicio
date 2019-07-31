@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
         //Revisa si ya hay un usuario en las preferencias, si no abre la actividad de iniciar sesion
-        Long id = preferences.getLong("userId", -1);
-        if (String.valueOf(id).equals("-1")){
+        String id = preferences.getString("userId", "-1");
+        if (id.equals("-1")){
             Intent Sesion = new Intent(this, InicioSesion.class);
             startActivity(Sesion);
             finish();

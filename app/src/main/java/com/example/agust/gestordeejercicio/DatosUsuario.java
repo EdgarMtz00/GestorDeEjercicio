@@ -75,7 +75,7 @@ public class DatosUsuario extends AppCompatActivity {
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    editor.putLong("userId", userid); //se guarda la id del usuario en las preferencias
+                                    editor.putString("userId", String.valueOf(userid)); //se guarda la id del usuario en las preferencias
                                     editor.apply();
                                     startActivity(new Intent(ctx, MainActivity.class));
                                     finish();//termina la actividad

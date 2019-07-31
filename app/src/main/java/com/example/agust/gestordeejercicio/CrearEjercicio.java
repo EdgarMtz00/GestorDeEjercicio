@@ -28,7 +28,7 @@ public class CrearEjercicio extends AppCompatActivity {
     private String dia;
     int zona;
     String url;
-    Long id;
+    String  id;
     Context ctx = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class CrearEjercicio extends AppCompatActivity {
         spinDias = findViewById(R.id.spinDias);
         spinZona = findViewById(R.id.spinZona);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        id = preferences.getLong("userId", -1);
+        id = preferences.getString("userId", "-1");
         String ip = preferences.getString("ip", "");
         url = "http://" + ip + "/serverejercicio/ejercicios.php";
         spinDias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -71,7 +71,7 @@ public class CrearEjercicio extends AppCompatActivity {
                 try {
                     request.put("nombre", txtNombre.getText().toString());
                     request.put("repeticiones", txtRepeticiones.getText().toString());
-                    request.put("idUsuario", String.valueOf(id));
+                    request.put("idUsuario", id);
                     request.put("dia", dia);
                     request.put("zona",zona);
 

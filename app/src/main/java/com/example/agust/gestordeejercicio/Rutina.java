@@ -58,17 +58,17 @@ public class Rutina {
         rutina.setRepeticiones(j.getString("Repeticiones"));
         rutina.setId(j.getInt("Id"));
         //dependiendo del valor de peso se agrega un texto diferente a la instruccion
-        if (j.has("Peso")){
+        if (!j.getString("Peso").equals("null")){
             String instruccion = rutina.getEjercicio().getInstruccion();
-            switch (j.getInt("Peso")){
-                case 1:
-                     instruccion += "peso bajo";
+            switch (j.getString("Peso")){
+                case "Bajo":
+                     instruccion += "Realizar el ejercicio con un 50% del peso maximo que puedas levantar";
                      break;
-                case 2:
-                    instruccion += "peso bajo";
+                case "Medio":
+                    instruccion += "Realizar el ejercicio con entre el 60% a 80% del peso maximo que puedas levantar";
                     break;
-                case 3:
-                    instruccion += "peso bajo";
+                case "Alto":
+                    instruccion += "Realizar el ejercicio con entre el 80% a 100% del peso maximo que puedas levantar";
                     break;
             }
             rutina.getEjercicio().setInstruccion(instruccion);

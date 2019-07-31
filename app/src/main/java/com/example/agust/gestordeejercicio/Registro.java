@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,6 +24,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class Registro extends AppCompatActivity {
@@ -33,6 +37,10 @@ public class Registro extends AppCompatActivity {
     Context ctx = this;
     Spinner spinNivel;
     int nivel = 1;
+    String enfoque = "";
+    Spinner spinTipo;
+    List<String> list = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +51,55 @@ public class Registro extends AppCompatActivity {
         etEstatura = findViewById(R.id.etEstatura);
         etPeso = findViewById(R.id.etPeso);
         etEdad = findViewById(R.id.etEdad);
+        spinTipo = (Spinner)findViewById(R.id.spinTipo);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String ip = preferences.getString("ip", "");
         url = "http://" + ip + "/ServerEjercicio/Registrar.php"; //URL de la API
         spinNivel = findViewById(R.id.spinNivel);
+        list.add("acondicionamiento");
+
+        final ArrayAdapter spinAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinTipo.setAdapter(spinAdapter);
+
 
         //Evento para cuando se selecciona un nivel
         spinNivel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 nivel = position + 1;//el nivel se representa del 1 al 3 por lo que solo se toma la posicion seleccionada
+                if(nivel == 1)
+                {
+                    spinAdapter.clear();
+                    spinAdapter.add("Ninguno");
+                    spinAdapter.add("Acondicionamiento");
+                    spinAdapter.notifyDataSetChanged();
+                }else{
+                    spinAdapter.clear();
+                    spinAdapter.add("Ninguno");
+                    spinAdapter.add("Tonificar");
+                    spinAdapter.add("Aumentar musculatura");
+                    spinAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinTipo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                enfoque = spinTipo.getSelectedItem().toString();
+                if(enfoque == "Ninguno"){
+                    enfoque = "";
+                }else if(enfoque == "Aumentar musculatura"){
+                    enfoque = "musculatura";
+                }else {
+                    enfoque = enfoque.toLowerCase();
+                }
             }
 
             @Override
@@ -89,6 +136,7 @@ public class Registro extends AppCompatActivity {
                     data.put("peso", Integer.parseInt(peso));
                     data.put("estatura", Integer.parseInt(estatura));
                     data.put("nivel", nivel);
+                    data.put("enfoque", enfoque);
 
                     //peticion para registrar un usuario
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
@@ -135,7 +183,7 @@ public class Registro extends AppCompatActivity {
             //guarda el id y nivel del usuario en las preferencias
             Toast.makeText(this, "Registrado" + data.getString("msg"), Toast.LENGTH_SHORT).show();
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putLong("userId", (long) data.getInt("id"));
+            editor.putString("userId", data.getString("id"));
             editor.putInt("nivel", data.getInt("nivel"));
             editor.apply();
 

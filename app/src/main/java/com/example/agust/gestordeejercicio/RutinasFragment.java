@@ -72,7 +72,7 @@ public class RutinasFragment extends Fragment {
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         editor = preferences.edit();
         String ip = preferences.getString("ip", "");
-        String url = "http://" + ip + "/serverejercicio/rutinas.php?idUsuario=" + preferences.getLong("userId", -1);
+        String url = "http://" + ip + "/serverejercicio/rutinas.php?idUsuario=" + preferences.getString("userId", "-1");
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
