@@ -95,6 +95,8 @@ public class Ejercicio {
         res.put("idUsuario",  String.valueOf(usuario));
         res.put("repeticiones", this.repeticiones);
         res.put("dia", dia);
+        res.put("nombre", this.nombre);
+        res.put("zona", this.zona);
         return res;
     }
 }
