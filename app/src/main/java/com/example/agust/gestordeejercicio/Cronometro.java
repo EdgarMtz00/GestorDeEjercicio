@@ -63,6 +63,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
     Switch swCorrer;
     int progreso = 0;
     long progresoTemp=0;
+    int progresoTotal = 0;
     Button btnInicio, btnPausa;
     SensorManager sManager;
     Sensor stepSensor;
@@ -82,6 +83,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
             if(progreso==60)
                 progreso=0;
             progreso++;
+            progresoTotal++;
             prgReloj.setProgress(progreso);
         }
 
@@ -146,9 +148,14 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 }else{
                     crono.stop(); //detiene el cronometro
                     timerProgress.cancel();
-                    guardarTiempo(progreso); //envia el tiempo a la peticion para guardarlo
+                    guardarTiempo(progresoTotal); //envia el tiempo a la peticion para guardarlo
+                    if(clickPausa) {
+                        clickPausa = !clickPausa;
+                        btnPausa.setText("PAUSAR");
+                    }
                     progreso = 0;
                     progresoTemp = 0;//reinicia el tiempo
+                    progresoTotal = 0;
                     prgReloj.setProgress(progreso);
                     crono.setBase(SystemClock.elapsedRealtime());
                     steps = 0;
@@ -167,7 +174,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
         btnPausa.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(!clickInicio)
+                if(clickInicio)
                 {
                     clickPausa = !clickPausa;
                     if(clickPausa){
@@ -181,6 +188,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
                         timerProgress.start();
                         btnPausa.setText("PAUSAR");
                         progreso--;
+                        progresoTotal--;
                     }
                 }
             }
@@ -210,14 +218,14 @@ public class Cronometro extends Fragment implements SensorEventListener {
                     if(response.has("tiempo")){
                         try {
                             if(response.getInt("porcentaje") >= 0) {
-                                txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
-                                        + response.getInt("tiempo") + "\n Aumento +" + response.getInt("porcentaje")
-                                        + "% en comparacion al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
+                                txtTiempo.setText("Tiempo: " + tiempo + " segundos\nTiempo anterior: "
+                                        + response.getInt("tiempo") + " segundos\nAumentó +" + response.getInt("porcentaje")
+                                        + "% en comparación al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
                                 txtTiempo.setVisibility(View.VISIBLE);
                             }else{
                                 txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
-                                        + response.getInt("tiempo") + "\n Disminuyo " + response.getInt("porcentaje")
-                                        + "% en comparacion al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
+                                        + response.getInt("tiempo") + "\n Disminuyó " + response.getInt("porcentaje")
+                                        + "% en comparación al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
                                 txtTiempo.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
