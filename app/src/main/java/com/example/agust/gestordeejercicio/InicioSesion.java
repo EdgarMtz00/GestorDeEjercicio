@@ -27,7 +27,7 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class InicioSesion extends AppCompatActivity implements View.OnClickListener {
+public class InicioSesion extends AppCompatActivity {
     SharedPreferences preferences; //Preferencias de la aplicacion
     SharedPreferences.Editor editor; //Editor de preferencias
     EditText etCorreo, etContrasena; //Campos de corre y contraseña
@@ -55,7 +55,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         editor = preferences.edit();
         String ip = preferences.getString("ip", "");
         url = "http://" + ip + "/ServerEjercicio/IniciarSesion.php"; //Url de la API
-        btnInicio.setOnClickListener(this);
+
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email");
 
@@ -72,14 +72,14 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     public void onResponse(JSONObject response) {
                         try {
                             if (response.getBoolean("register")){
-                                editor.putLong("userId", Long.parseLong(id));
-                                editor.putInt("nivel", response.getInt("Nivel"));
+                                editor.putString("userId", id);
+                                editor.putInt("nivel", response.getInt("nivel"));
                                 editor.apply();
                                 startActivity(new Intent(ctx, MainActivity.class));
                                 finish();
                             }else{
                                 Intent intent = new Intent(ctx, DatosUsuario.class);
-                                intent.putExtra("id", Long.parseLong(id));
+                                intent.putExtra("id", id);
                                 startActivity(intent);
                             }
                         } catch (JSONException e) {
@@ -89,7 +89,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        error.printStackTrace();
                     }
                 });
                 RequestQueue rQueue = Volley.newRequestQueue(ctx);
@@ -108,44 +108,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    /**
-     * Evento accionado cuando se presiona btnInicio
-     * obtiene informacion de inicio de sesion de la API
-     * y llama a realizar el logIn.
-     */
-    @Override
-    public void onClick(View v){
-        String correo, contrasena;
-        correo = etCorreo.getText().toString();
-        contrasena = etContrasena.getText().toString();
-        if (Utils.validateEmail(correo) && Utils.validateText(correo)){
-            JSONObject data = new JSONObject();
-            try {
-                //obtiene los datos ingresados
-                data.put("correo", correo);
-                data.put("pwd", contrasena);
 
-                //peticion para iniciar sesion
-                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject jsonObject) {
-                                logIn(jsonObject);
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                            }
-                        });
-                RequestQueue rQueue = Volley.newRequestQueue(this);
-                rQueue.add(jsonRequest);
-                rQueue.start();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * Guarda el id del usuario en las preferencias y accede a MainActivity
@@ -154,7 +117,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     public void logIn(JSONObject jsonObject){
         try {
             if(jsonObject.getBoolean("logIn")){
-                editor.putLong("userId", jsonObject.getInt("id"));
+                editor.putString("userId", jsonObject.getString("id"));
                 editor.putInt("nivel", jsonObject.getInt("nivel")); //Se guarda el id y nivel del usuario
                 editor.apply();
                 startActivity(new Intent(this, MainActivity.class)); //da acceso a la aplicacion
@@ -178,5 +141,39 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     //inicia la actividad de registro
     public void onClickRegistro(View v){
         startActivity( new Intent(this, Registro.class));
+    }
+
+    public void onClickInicio(View v){
+        String correo, contrasena;
+        correo = etCorreo.getText().toString();
+        contrasena = etContrasena.getText().toString();
+        if (Utils.validateEmail(correo) && Utils.validateText(correo)){
+            JSONObject data = new JSONObject();
+            try {
+                //obtiene los datos ingresados
+                data.put("correo", correo);
+                data.put("pwd", contrasena);
+
+                //peticion para iniciar sesion
+                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                logIn(jsonObject);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                volleyError.printStackTrace();
+                            }
+                        });
+                RequestQueue rQueue = Volley.newRequestQueue(ctx);
+                rQueue.add(jsonRequest);
+                rQueue.start();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

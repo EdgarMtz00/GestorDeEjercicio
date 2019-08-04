@@ -50,6 +50,8 @@
     <string name="sentadillas">Sentadillas</string>
     <string name="push_up">Push up</string>
     <string name="alcanzado">Felicidades alcanzo su meta!!! ¿Desea aumentar el numero de repeticiones aun mas o cambiar de meta?</string>
+    <string name="salir">Salir</string>
+    <string name="cancelar">Cancelar</string>
 
     <string-array name="niveles">
         <item>Principiante</item>

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -55,6 +56,14 @@ public class DatosUsuario extends AppCompatActivity {
 
             }
         });
+        Button btnSalir = findViewById(R.id.btnSalir);
+
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //Evento para cuando se oprime el boton de confirmar
         findViewById(R.id.btnDatos).setOnClickListener(new View.OnClickListener() {
@@ -96,5 +105,10 @@ public class DatosUsuario extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void help(View v){
+        Intent Info = new Intent(this, Informacion.class);
+        startActivity(Info);
     }
 }

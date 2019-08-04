@@ -11,38 +11,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="61dp">
+
         <TextView
             android:id="@+id/txtDia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Dia"
+            android:textAlignment="center"
             android:textSize="25sp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textAlignment="center"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
             <Button
-                android:id="@+id/btnSig"
+                android:id="@+id/btnSalir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/siguiente_dia"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtDia"
-                android:gravity="left"
-                android:layout_marginRight="40dp"/>
+                android:text="@string/salir"/>
+
             <Button
                 android:id="@+id/btnCrear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/anadir_ejercicios"
-                app:layout_constraintTop_toBottomOf="@id/txtDia"
-                android:gravity="right"/>
+                app:layout_constraintTop_toBottomOf="@id/txtDia" />
+
+            <Button
+                android:id="@+id/btnSig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/siguiente_dia"
+                app:layout_constraintTop_toBottomOf="@id/txtDia" />
         </LinearLayout>
+
         <Spinner
             android:id="@+id/spinZonas"
             android:layout_width="match_parent"

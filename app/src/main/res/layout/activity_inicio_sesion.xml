@@ -46,50 +46,35 @@
 
     <Button
         android:id="@+id/btnInicio"
-        android:layout_width="0dp"
+        android:layout_width="190dp"
+        android:onClick="onClickInicio"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="80dp"
         android:background="#344955"
         android:text="@string/iniciar_sesion"
         android:textColor="#FFFFFF"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etContrasena" />
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
-    <TextView
-        android:id="@+id/txtOlvidar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="80dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/contrasena_olvidada"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnInicio" />
+
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOlvidar" />
+        app:layout_constraintTop_toBottomOf="@+id/etContrasena" />
 
     <Button
         android:id="@+id/btnRegistro"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="80dp"
         android:onClick="onClickRegistro"
         android:text="@string/registrarse"
@@ -98,5 +83,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/btnInicio" />
 </android.support.constraint.ConstraintLayout>

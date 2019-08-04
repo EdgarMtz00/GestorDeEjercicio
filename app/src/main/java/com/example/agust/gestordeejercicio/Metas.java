@@ -42,7 +42,6 @@ public class Metas extends Fragment {
         @Override
         public void onClick(View v) {
             String meta = ((Button)v).getText().toString();
-            meta = (meta.equals("Push up"))? "Brazos" : (meta.equals("Abdominales"))? "Abdomen" : "Piernas";
             try {
                 String id = preferences.getString("userId", "-1");
                 String ip = preferences.getString("ip", "");
@@ -88,12 +87,12 @@ public class Metas extends Fragment {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK){
                 int repeticiones = data.getIntExtra("repeticiones", -1);
-                Long id = preferences.getLong("userId", -1);
+                String id = preferences.getString("userId", "-1");
                 String ip = preferences.getString("ip", "");
                 String url = "http://" + ip + "/serverejercicio/metas.php";
                 JSONObject request = new JSONObject();
                 try {
-                    request.put("idUsuario", String.valueOf(id));
+                    request.put("idUsuario", id);
                     request.put("repeticiones", repeticiones);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -165,14 +164,16 @@ public class Metas extends Fragment {
             @Override
             public void onClick(View v) {
                 if(btnMedir.getText().equals("Continuar")){
+                    btnMedir.setText("Medir Progreso");
                     txtAlcanzado.setVisibility(View.GONE);
                     JSONObject request = new JSONObject();
-                    Long id = preferences.getLong("userId", -1);
+                    String id = preferences.getString("userId", "-1");
                     String ip = preferences.getString("ip", "");
                     String url = "http://" + ip + "/serverejercicio/metas.php";
                     try {
-                        request.put("idUsuario", String.valueOf(id));
-                        request.put("nuevaMeta", Integer.parseInt(txtNumRep.getText().toString()));
+                        request.put("idUsuario", id);
+                        request.put("nuevaMeta", Integer.parseInt(txtNumRep.getText().toString().substring(9)));
+                        request.put("repeticiones", Integer.parseInt(txtUltimas.getText().toString()));
                         request.put("nivel", preferences.getInt("nivel", 0));
                         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, request,
                                 new Response.Listener<JSONObject>() {

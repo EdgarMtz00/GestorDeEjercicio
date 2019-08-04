@@ -52,6 +52,14 @@ public class CrearRutina extends AppCompatActivity {
         final String ip = preferences.getString("ip", "");
         String url ="http://" + ip + "/serverejercicio/ejercicios.php?idUsuario=" + preferences.getString("userId", "-1");
         Button btnCrear = findViewById(R.id.btnCrear);
+        Button btnSalir = findViewById(R.id.btnSalir);
+
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //Evento parainiciar la actividad de CrearEjercicio
         btnCrear.setOnClickListener(new View.OnClickListener() {

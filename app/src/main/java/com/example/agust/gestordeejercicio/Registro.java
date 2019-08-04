@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -62,6 +63,14 @@ public class Registro extends AppCompatActivity {
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinTipo.setAdapter(spinAdapter);
 
+        Button btnSalir = findViewById(R.id.btnSalir);
+
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //Evento para cuando se selecciona un nivel
         spinNivel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

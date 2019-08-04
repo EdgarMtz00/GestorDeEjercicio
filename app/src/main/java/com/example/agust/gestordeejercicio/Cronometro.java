@@ -32,6 +32,7 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -106,6 +107,9 @@ public class Cronometro extends Fragment implements SensorEventListener {
         prgReloj.setMax(60); //Establece 60 como el valor maximo de prgReloj
         sManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+
+
+        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         //Evento de cambio en swCorrer
         swCorrer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -187,7 +191,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
     private void guardarTiempo(final int tiempo){
         JSONObject request = new JSONObject();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext()); //preferencias de la aplicacion
-        Long id = preferences.getLong("userId", -1);
+        String id = preferences.getString("userId", "-1");
         String ip = preferences.getString("ip", "");
         final String url = "http://" + ip + "/ServerEjercicio/tiempo.php"; //URL de la API
 
@@ -197,7 +201,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 request.put("Correr", true); //indica si la medicion fue de correr o de ejercitar
             }
             request.put("tiempo", tiempo);
-            request.put("idUsuario", id.toString());
+            request.put("idUsuario", id);
 
             //peticion para guardar el tiempo
             JsonObjectRequest setTiempo = new JsonObjectRequest(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
@@ -205,10 +209,17 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 public void onResponse(JSONObject response) {
                     if(response.has("tiempo")){
                         try {
-                            txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
-                                    + response.getInt("tiempo") + "\n" +response.getInt("porcentaje")
-                                    + "% en comparacion al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
-                            txtTiempo.setVisibility(View.VISIBLE);
+                            if(response.getInt("porcentaje") >= 0) {
+                                txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
+                                        + response.getInt("tiempo") + "\n Aumento +" + response.getInt("porcentaje")
+                                        + "% en comparacion al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
+                                txtTiempo.setVisibility(View.VISIBLE);
+                            }else{
+                                txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
+                                        + response.getInt("tiempo") + "\n Disminuyo " + response.getInt("porcentaje")
+                                        + "% en comparacion al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
+                                txtTiempo.setVisibility(View.VISIBLE);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -231,6 +242,19 @@ public class Cronometro extends Fragment implements SensorEventListener {
         }
     }
 
+/*
+    @Override
+    public void onResume() {
+        super.onResume();
+        sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        sManager.unregisterListener(this, stepSensor);
+    }
+*/
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor; //toma la informacion del sensor de pasos
