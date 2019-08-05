@@ -38,7 +38,7 @@ public class DatosUsuario extends AppCompatActivity {
         txtEstatura = findViewById(R.id.etEstatura);
         txtPeso = findViewById(R.id.etPeso);
         Intent intent = getIntent();
-        final long userid = intent.getLongExtra("id", -1);
+        final String userid = intent.getStringExtra("id");
         preferences = PreferenceManager.getDefaultSharedPreferences(this); //preferencias de la aplicacion
         editor = preferences.edit();
         String ip = preferences.getString("ip", "");
@@ -75,7 +75,7 @@ public class DatosUsuario extends AppCompatActivity {
                     jsonObject.put("edad", txtEdad.getText().toString());
                     jsonObject.put("estatura", txtEstatura.getText().toString());
                     jsonObject.put("peso", txtPeso.getText().toString());
-                    jsonObject.put("id", String.valueOf(userid));
+                    jsonObject.put("id", userid);
                     jsonObject.put("nivel", nivel);
                     jsonObject.put("facebook", true); //marca al usuario como un usuario de fb
 
