@@ -36,8 +36,9 @@ public class Metas extends Fragment {
     ConstraintLayout cambiarMeta, progresoMeta;
     SharedPreferences preferences;
     TextView txtProm, txtRecord, txtUltimas, txtMeta, txtNumRep, txtAlcanzado;
-    EditText txtObjetivo;
+    EditText txtObjetivo, txtReq;
     Context ctx;
+    boolean req;
     View.OnClickListener elegirMeta = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -147,6 +148,7 @@ public class Metas extends Fragment {
         txtNumRep = v.findViewById(R.id.txtNumRep);
         txtObjetivo = v.findViewById(R.id.txtObjetivo);
         txtAlcanzado = v.findViewById(R.id.txtAlcanzado);
+        txtReq = v.findViewById(R.id.txtReq);
 
         getStats();
 
@@ -166,38 +168,49 @@ public class Metas extends Fragment {
             @Override
             public void onClick(View v) {
                 if(btnMedir.getText().equals("Continuar")){
-                    btnMedir.setText("Medir Progreso");
-                    txtAlcanzado.setVisibility(View.GONE);
-                    JSONObject request = new JSONObject();
-                    String id = preferences.getString("userId", "-1");
-                    String ip = preferences.getString("ip", "");
-                    String url = "http://" + ip + "/serverejercicio/metas.php";
-                    try {
-                        request.put("idUsuario", id);
-                        request.put("nuevaMeta", Integer.parseInt(txtNumRep.getText().toString().substring(9)));
-                        request.put("repeticiones", Integer.parseInt(txtUltimas.getText().toString()));
-                        request.put("nivel", preferences.getInt("nivel", 0));
-                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, request,
-                                new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        try {
-                                            txtNumRep.setText("Objetivo:" + response.getString("meta"));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
+                    if(req) {
+                        try {
+                            JSONObject request = new JSONObject();
+                            btnMedir.setText("Medir Progreso");
+                            if(!txtReq.getText().toString().equals("")){
+                                request.put("req", Integer.parseInt(txtReq.getText().toString()));
                             }
-                        });
-                        RequestQueue rQueue = Volley.newRequestQueue(getContext());
-                        rQueue.add(jsonObjectRequest);
-                        rQueue.start();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                            req = !req;
+                            txtAlcanzado.setVisibility(View.GONE);
+                            txtReq.setVisibility(View.GONE);
+
+                            String id = preferences.getString("userId", "-1");
+                            String ip = preferences.getString("ip", "");
+                            String url = "http://" + ip + "/serverejercicio/metas.php";
+                            request.put("idUsuario", id);
+                            request.put("nuevaMeta", Integer.parseInt(txtNumRep.getText().toString().substring(9)));
+                            request.put("repeticiones", Integer.parseInt(txtUltimas.getText().toString()));
+                            request.put("nivel", preferences.getInt("nivel", 0));
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, request,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                txtNumRep.setText("Objetivo:" + response.getString("meta"));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                            RequestQueue rQueue = Volley.newRequestQueue(getContext());
+                            rQueue.add(jsonObjectRequest);
+                            rQueue.start();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        req = !req;
+                        txtReq.setVisibility(View.VISIBLE);
                     }
                 }else {
                     Intent medir = new Intent(getContext(), ContadorRepeticiones.class);

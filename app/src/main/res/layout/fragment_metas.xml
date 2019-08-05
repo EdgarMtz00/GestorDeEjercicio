@@ -181,5 +181,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/medir_progreso"
             android:textSize="17sp"/>
+        <EditText
+            android:id="@+id/txtReq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:visibility="gone"
+            android:inputType="number"
+            android:hint="@string/req"
+            app:layout_constraintTop_toBottomOf="@+id/btnMedirMeta"
+            app:layout_constraintStart_toStartOf="@id/btnMedirMeta"/>
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
