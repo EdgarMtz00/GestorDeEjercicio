@@ -46,7 +46,7 @@ public class Metas extends Fragment {
                 String id = preferences.getString("userId", "-1");
                 String ip = preferences.getString("ip", "");
                 int nivel = preferences.getInt("nivel", 0);
-                if (!txtObjetivo.getText().equals("")) {
+                if (!txtObjetivo.getText().toString().equals("")) {
                     int repeticiones = Integer.parseInt(txtObjetivo.getText().toString());
                     if (repeticiones > nivel * 25) {
                         Toast.makeText(ctx, "No puede exceder de " + nivel * 25 + "repeticiones por su nivel", Toast.LENGTH_LONG).show();
@@ -74,6 +74,8 @@ public class Metas extends Fragment {
                         rQueue.add(objectRequest);
                         rQueue.start();
                     }
+                }else{
+                  Toast.makeText(ctx, "Ingrese un valor", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

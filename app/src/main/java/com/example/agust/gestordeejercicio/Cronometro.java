@@ -121,7 +121,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
                     txtPasos.setVisibility(View.VISIBLE);
                 }else {//oculta la distancia y pasos
                     txtDistancia.setVisibility(View.GONE);
-                    txtDistancia.setVisibility(View.GONE);
+                    txtPasos.setVisibility(View.GONE);
                 }
             }
         });
@@ -137,6 +137,8 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 clickInicio = !clickInicio;
                 if(clickInicio){
                     txtTiempo.setVisibility(View.GONE);
+                    txtPasos.setText("0");
+                    txtDistancia.setText("0m");
                     crono.setBase(SystemClock.elapsedRealtime());//inicializa el cronometro
                     crono.start();
                     timerProgress.start();//inicia el progress bar para que vata a la par del cronometro
@@ -167,7 +169,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
         btnPausa.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(!clickInicio)
+                if(clickInicio)
                 {
                     clickPausa = !clickPausa;
                     if(clickPausa){
@@ -258,7 +260,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor; //toma la informacion del sensor de pasos
-        if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR && clickInicio && correr) {
+        if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR && clickInicio && correr && !clickPausa) {
             steps++; //suma cada paso
             distance = (float)(steps*78)/(float)100; //calcula la distancia
             txtPasos.setText("Pasos:" + steps);
