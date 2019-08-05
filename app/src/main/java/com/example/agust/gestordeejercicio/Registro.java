@@ -136,40 +136,48 @@ public class Registro extends AppCompatActivity {
             peso = etPeso.getText().toString();
             String[] input ={correo, pwd, edad, estatura, peso};
             if(Utils.validateText(input)) {//si es validada
-                JSONObject data = new JSONObject();
-                try {
-                    //se almacena en el json que se enviara en la peticion
-                    data.put("correo", correo);
-                    data.put("contrasena", pwd);
-                    data.put("edad", Integer.parseInt(edad));
-                    data.put("peso", Integer.parseInt(peso));
-                    data.put("estatura", Integer.parseInt(estatura));
-                    data.put("nivel", nivel);
-                    data.put("enfoque", enfoque);
+                if(Utils.validateEmail(correo)) {
+                    JSONObject data = new JSONObject();
+                    try {
+                        //se almacena en el json que se enviara en la peticion
+                        data.put("correo", correo);
+                        data.put("contrasena", pwd);
+                        data.put("edad", Integer.parseInt(edad));
+                        data.put("peso", Integer.parseInt(peso));
+                        data.put("estatura", Integer.parseInt(estatura));
+                        data.put("nivel", nivel);
+                        data.put("enfoque", enfoque);
 
-                    //peticion para registrar un usuario
-                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    logIn(response); //si no falla la peticion procede a iniciar la sesion recien creada
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
+                        //peticion para registrar un usuario
+                        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, data,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        logIn(response); //si no falla la peticion procede a iniciar la sesion recien creada
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        error.printStackTrace();
 
-                                }
-                            });
+                                    }
+                                });
 
-                    //inicia la peticion de registrar
-                    RequestQueue rQueue = Volley.newRequestQueue(this);
-                    rQueue.add(jsonRequest);
-                    rQueue.start();
+                        //inicia la peticion de registrar
+                        RequestQueue rQueue = Volley.newRequestQueue(this);
+                        rQueue.add(jsonRequest);
+                        rQueue.start();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+
+                    Toast.makeText(this, "Correo no valido", Toast.LENGTH_SHORT).show();
                 }
+            }else{
+                Toast.makeText(this, "LLene todos los campos", Toast.LENGTH_SHORT).show();
             }
         }else{
             //Datos no validos
