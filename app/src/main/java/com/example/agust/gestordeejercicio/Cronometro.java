@@ -55,6 +55,7 @@ import java.sql.Time;
  * prgReloj: Barra de progreso circular que muestra el avance del cronómetro.
  * progreso: Segundos transcurridos desde que se inicio el cronómetro.
  * progresoTemp: Almacena el tiempo transcurrido desde que se inició el cronómetro hasta que se presionó btnPausa.
+ * progresoTotal:
  */
 public class Cronometro extends Fragment implements SensorEventListener {
     boolean clickInicio, clickPausa;
@@ -121,9 +122,11 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 if (correr) {//muestra la distancia y pasos
                     txtDistancia.setVisibility(View.VISIBLE);
                     txtPasos.setVisibility(View.VISIBLE);
+                    txtTiempo.setVisibility(View.GONE);
                 }else {//oculta la distancia y pasos
                     txtDistancia.setVisibility(View.GONE);
                     txtDistancia.setVisibility(View.GONE);
+                    txtTiempo.setVisibility(View.GONE);
                 }
             }
         });
@@ -148,7 +151,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 }else{
                     crono.stop(); //detiene el cronometro
                     timerProgress.cancel();
-                    guardarTiempo(progresoTotal); //envia el tiempo a la peticion para guardarlo
+                    guardarTiempo(progresoTotal-1); //envia el tiempo a la peticion para guardarlo
                     if(clickPausa) {
                         clickPausa = !clickPausa;
                         btnPausa.setText("PAUSAR");
@@ -216,15 +219,18 @@ public class Cronometro extends Fragment implements SensorEventListener {
                 @Override
                 public void onResponse(JSONObject response) {
                     if(response.has("tiempo")){
+                        int res = tiempo % 3600;
                         try {
+                            int tiempoAnt = response.getInt("tiempo");
+                            int resAnt = tiempoAnt % 3600;
                             if(response.getInt("porcentaje") >= 0) {
-                                txtTiempo.setText("Tiempo: " + tiempo + " segundos\nTiempo anterior: "
-                                        + response.getInt("tiempo") + " segundos\nAumentó +" + response.getInt("porcentaje")
+                                txtTiempo.setText("Tiempo: " + tiempo/3600 + ":" + res/60 + ":" + res%60 +"\nTiempo anterior: "
+                                        + tiempoAnt/3600 + ":" + resAnt/60 + ":" + resAnt%60 + "\nAumentó +" + response.getInt("porcentaje")
                                         + "% en comparación al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
                                 txtTiempo.setVisibility(View.VISIBLE);
                             }else{
-                                txtTiempo.setText("Tiempo :" + tiempo + "\n tiempo anterior:"
-                                        + response.getInt("tiempo") + "\n Disminuyó " + response.getInt("porcentaje")
+                                txtTiempo.setText("Tiempo:" + tiempo/3600 + ":" + res/60 + ":" + res%60 +"\nTiempo anterior: "
+                                        + tiempoAnt/3600 + ":" + resAnt/60 + ":" + resAnt%60 + "\nDisminuyó " + response.getInt("porcentaje")
                                         + "% en comparación al recorrido anterior"); //muestra la comparativa de otros tiempos y el actual
                                 txtTiempo.setVisibility(View.VISIBLE);
                             }
