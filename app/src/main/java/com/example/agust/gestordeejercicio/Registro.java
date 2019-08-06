@@ -127,13 +127,28 @@ public class Registro extends AppCompatActivity {
      */
     public void onClickRegistro(View v){
         String correo, pwd, estatura, edad, peso;
+
+        correo = etCorreo.getText().toString();
+        pwd = etContrasena.getText().toString();
+        edad = etEdad.getText().toString();
+        estatura = etEstatura.getText().toString();
+        peso = etPeso.getText().toString();
+
+        if (Integer.parseInt(estatura) < 150 || Integer.parseInt(estatura) > 230){
+            Toast.makeText(ctx, "Estatura fuera de los límites de la aplicación", Toast.LENGTH_SHORT).show();
+            return;
+        }else if(Integer.parseInt(edad) < 15){
+            Toast.makeText(ctx, "Tienes que ser mayor de 15 años para usar la aplicación", Toast.LENGTH_SHORT).show();
+            return;
+        }else if(Integer.parseInt(edad) > 60){
+            Toast.makeText(ctx, "Por tu seguridad debes de ser menor de 60 años para usar la aplicación", Toast.LENGTH_SHORT).show();
+            return;
+        }else if(Integer.parseInt(peso) < 45 || Integer.parseInt(peso) > 250){
+            Toast.makeText(ctx, "Peso invalido", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(etContrasena.getText().toString().equals(etPwd.getText().toString())) {
             //se recolecta la informacion ingresada
-            correo = etCorreo.getText().toString();
-            pwd = etContrasena.getText().toString();
-            edad = etEdad.getText().toString();
-            estatura = etEstatura.getText().toString();
-            peso = etPeso.getText().toString();
             String[] input ={correo, pwd, edad, estatura, peso};
             if(Utils.validateText(input)) {//si es validada
                 if(Utils.validateEmail(correo)) {
@@ -160,7 +175,6 @@ public class Registro extends AppCompatActivity {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         error.printStackTrace();
-
                                     }
                                 });
 

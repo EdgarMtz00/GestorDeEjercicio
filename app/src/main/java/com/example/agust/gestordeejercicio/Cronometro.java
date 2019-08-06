@@ -71,6 +71,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
     TextView txtDistancia, txtPasos, txtTiempo;
     private long steps = 0;
     private float distance;
+    int zancada = 0;
     View v;
 
     /**
@@ -81,16 +82,16 @@ public class Cronometro extends Fragment implements SensorEventListener {
     CountDownTimer timerProgress = new CountDownTimer(60000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
-            if(progreso==60)
-                progreso=0;
             progreso++;
-            progresoTotal++;
             prgReloj.setProgress(progreso);
+            progresoTotal++;
         }
 
         @Override
         public void onFinish() {
+            progreso=0;
             prgReloj.setProgress(progreso);
+            progresoTotal++;
             timerProgress.start();
         }
     };
@@ -111,7 +112,6 @@ public class Cronometro extends Fragment implements SensorEventListener {
         sManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
 
-
         sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         //Evento de cambio en swCorrer
@@ -123,6 +123,29 @@ public class Cronometro extends Fragment implements SensorEventListener {
                     txtDistancia.setVisibility(View.VISIBLE);
                     txtPasos.setVisibility(View.VISIBLE);
                     txtTiempo.setVisibility(View.GONE);
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    String ip = preferences.getString("ip", "");
+                    final String url = "http://" + ip + "/ServerEjercicio/tiempo.php?idUsuario=" + preferences.getString("userId", "-1");;
+                    final JsonObjectRequest estatura = new JsonObjectRequest(Request.Method.GET, url, null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        int est = response.getInt("estatura");
+                                        zancada = (int)Math.round(est*0.414);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
+                    RequestQueue rQueue = Volley.newRequestQueue(getContext());
+                    rQueue.add(estatura);
+                    rQueue.start();
                 }else {//oculta la distancia y pasos
                     txtDistancia.setVisibility(View.GONE);
                     txtPasos.setVisibility(View.GONE);
@@ -276,7 +299,7 @@ public class Cronometro extends Fragment implements SensorEventListener {
         Sensor sensor = event.sensor; //toma la informacion del sensor de pasos
         if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR && clickInicio && correr && !clickPausa) {
             steps++; //suma cada paso
-            distance = (float)(steps*78)/(float)100; //calcula la distancia
+            distance = (float)(steps*zancada)/(float)100; //calcula la distancia
             txtPasos.setText("Pasos:" + steps);
             txtDistancia.setText("Distancia: " + distance + "m");
         }

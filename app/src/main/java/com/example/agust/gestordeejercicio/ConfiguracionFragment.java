@@ -155,13 +155,22 @@ public class ConfiguracionFragment extends Fragment {
                     //Se revisa que campos no estan vacios y se guarda su valor
                     jsonObject.put("idUsuario",  preferences.getString("userId", "-1"));
                     if(!etEdad.getText().toString().equals("")){
-                        jsonObject.put("edad", Integer.parseInt(etEdad.getText().toString()));
+                        if(Integer.parseInt(etEdad.getText().toString()) < 60 && Integer.parseInt(etEdad.getText().toString()) > 15)
+                            jsonObject.put("edad", Integer.parseInt(etEdad.getText().toString()));
+                        else
+                            Toast.makeText(getContext(), "Edad fuera de los límites de la aplicación", Toast.LENGTH_SHORT).show();
                     }
                     if(!etEstatura.getText().toString().equals("")){
-                        jsonObject.put("estatura", Integer.parseInt(etEstatura.getText().toString()));
+                        if(Integer.parseInt(etEstatura.getText().toString()) < 230 && Integer.parseInt(etEstatura.getText().toString()) > 150)
+                            jsonObject.put("estatura", Integer.parseInt(etEstatura.getText().toString()));
+                        else
+                            Toast.makeText(getContext(), "Estatura fuera de los límites de la aplicación", Toast.LENGTH_SHORT).show();
                     }
                     if(!etPeso.getText().toString().equals("")){
-                        jsonObject.put("peso", Integer.parseInt(etPeso.getText().toString()));
+                        if(Integer.parseInt(etPeso.getText().toString()) < 60 && Integer.parseInt(etPeso.getText().toString()) > 15)
+                            jsonObject.put("peso", Integer.parseInt(etPeso.getText().toString()));
+                        else
+                            Toast.makeText(getContext(), "Peso fuera de los límites de la aplicación", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
